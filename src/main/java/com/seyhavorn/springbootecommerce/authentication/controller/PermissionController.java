@@ -22,7 +22,7 @@ public class PermissionController {
         );
     }
 
-    @GetMapping("/")
+    @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public ApiResponse list() {
         return new ApiResponse(true, "Permission added", permissionService.findAll());

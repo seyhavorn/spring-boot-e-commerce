@@ -10,10 +10,10 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Table(name = "roles")
 @Getter
 @Setter
 @RequiredArgsConstructor
+@Table(name = "roles")
 public class Role extends AuditableEntity {
 
     @Id
