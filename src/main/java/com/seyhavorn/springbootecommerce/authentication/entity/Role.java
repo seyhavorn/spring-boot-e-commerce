@@ -3,7 +3,10 @@ package com.seyhavorn.springbootecommerce.authentication.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.seyhavorn.springbootecommerce.helper.AuditableEntity;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -31,8 +34,7 @@ public class Role extends AuditableEntity {
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "permission_role",
             joinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")},
-            inverseJoinColumns = {@JoinColumn(name = "permission_id", referencedColumnName = "id")}
-    )
+            inverseJoinColumns = {@JoinColumn(name = "permission_id", referencedColumnName = "id")})
     private Set<Permission> permissions = new HashSet<>();
 
     @Override

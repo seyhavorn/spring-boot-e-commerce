@@ -35,7 +35,10 @@ public class UserServiceImpl implements UserService {
         }
         User user = userMapper.fromSignupDto(signupDto);
         user.setPassword(passwordEncoder.encode(signupDto.getPassword()));
-        user.setUser_object(objectMapper.writeValueAsString(signupDto.getUser_object()));
+        user.setUser_object(objectMapper.writeValueAsString(signupDto));
+        user.setFirstName(signupDto.getFirst_name());
+        user.setLastName(signupDto.getLast_name());
+        user.setEmail(signupDto.getEmail());
         return new UserDetailsImpl(userRepository.save(user));
     }
 

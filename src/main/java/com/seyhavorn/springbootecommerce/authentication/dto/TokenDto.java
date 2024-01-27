@@ -20,15 +20,5 @@ public class TokenDto {
                         permission -> new PermissionDto(permission.getId(), permission.getName())
                 ).toList()
         );
-
-//        this.role.setId(role.getId());
-//        this.role.setName(role.getName());
-//        this.role.setPermissions(role.getPermissions().stream().map(permission -> {
-//            PermissionDto permissionDto = new PermissionDto();
-//            permissionDto.setId(permission.getId());
-//            permissionDto.setName(permission.getName());
-//            return permissionDto;
-//        }).toList());
-
     }
 }

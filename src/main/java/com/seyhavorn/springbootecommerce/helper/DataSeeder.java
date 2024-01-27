@@ -48,6 +48,7 @@ public class DataSeeder implements CommandLineRunner {
             signupDto.setPassword("password");
             signupDto.setFirst_name(faker.name().firstName());
             signupDto.setLast_name(faker.name().lastName());
+            signupDto.setEmail(faker.internet().emailAddress());
             userService.createUser(signupDto);
             Random random = new Random();
             userService.addRoleToUser((long) i, random.nextLong(4));

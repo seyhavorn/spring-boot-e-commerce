@@ -16,5 +16,6 @@ public class SignupDto {
     private String password;
     private String first_name;
     private String last_name;
+    private String email;
     private Map<String,Object> user_object;
 }
