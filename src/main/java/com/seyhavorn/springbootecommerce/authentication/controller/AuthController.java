@@ -1,8 +1,8 @@
 package com.seyhavorn.springbootecommerce.authentication.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.seyhavorn.springbootecommerce.authentication.dto.LoginDto;
-import com.seyhavorn.springbootecommerce.authentication.dto.SignupDto;
+import com.seyhavorn.springbootecommerce.authentication.request.LoginRequest;
+import com.seyhavorn.springbootecommerce.authentication.request.SignupRequest;
 import com.seyhavorn.springbootecommerce.authentication.dto.TokenDto;
 import com.seyhavorn.springbootecommerce.authentication.security.TokenGenerator;
 import com.seyhavorn.springbootecommerce.authentication.service.UserService;
@@ -38,7 +38,7 @@ public class AuthController {
     final DaoAuthenticationProvider daoAuthenticationProvider;
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody SignupDto signupDto) throws JsonProcessingException {
+    public ResponseEntity<?> register(@RequestBody SignupRequest signupDto) throws JsonProcessingException {
         UserDetailsImpl user = userService.createUser(signupDto);
 
         Authentication authentication = UsernamePasswordAuthenticationToken.authenticated(user, signupDto.getPassword(), Collections.emptyList());
@@ -46,7 +46,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginDto loginDto) {
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginDto) {
         Authentication authentication = daoAuthenticationProvider.authenticate(
                 UsernamePasswordAuthenticationToken.unauthenticated(loginDto.getUsername(), loginDto.getPassword())
         );

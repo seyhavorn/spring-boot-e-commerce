@@ -2,7 +2,7 @@ package com.seyhavorn.springbootecommerce.helper;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.javafaker.Faker;
-import com.seyhavorn.springbootecommerce.authentication.dto.SignupDto;
+import com.seyhavorn.springbootecommerce.authentication.request.SignupRequest;
 import com.seyhavorn.springbootecommerce.authentication.service.PermissionService;
 import com.seyhavorn.springbootecommerce.authentication.service.RoleService;
 import com.seyhavorn.springbootecommerce.authentication.service.UserService;
@@ -42,8 +42,8 @@ public class DataSeeder implements CommandLineRunner {
 
     private void createUser() throws JsonProcessingException {
         Faker faker = new Faker();
-        for (int i = 0; i < 10; i++) {
-            SignupDto signupDto = new SignupDto();
+        for (int i = 0; i < 100; i++) {
+            SignupRequest signupDto = new SignupRequest();
             signupDto.setUsername("test" + i);
             signupDto.setPassword("password");
             signupDto.setFirst_name(faker.name().firstName());

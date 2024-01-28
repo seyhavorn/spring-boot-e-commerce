@@ -15,7 +15,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @Transactional
 public class PermissionServiceImpl implements PermissionService {
-
     private final PermissionRepository permissionRepository;
 
     @Override

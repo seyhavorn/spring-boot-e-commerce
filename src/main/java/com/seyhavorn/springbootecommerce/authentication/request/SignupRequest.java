@@ -1,4 +1,4 @@
-package com.seyhavorn.springbootecommerce.authentication.dto;
+package com.seyhavorn.springbootecommerce.authentication.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
@@ -11,7 +11,7 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SignupDto {
+public class SignupRequest {
     private String username;
     private String password;
     private String first_name;

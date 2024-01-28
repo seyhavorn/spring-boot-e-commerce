@@ -7,6 +7,7 @@ import com.seyhavorn.springbootecommerce.authentication.entity.Role;
 import com.seyhavorn.springbootecommerce.authentication.repository.PermissionRepository;
 import com.seyhavorn.springbootecommerce.authentication.repository.RoleRepository;
 import com.seyhavorn.springbootecommerce.authentication.service.RoleService;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
+@Transactional
 public class RoleServiceImpl implements RoleService {
 
     private final RoleRepository roleRepository;
@@ -62,6 +64,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public List<RoleDto> findAll() {
         List<Role> roles = roleRepository.findAll(Sort.by(Sort.Direction.ASC, "name"));
+
         return roles.stream()
                 .map(role -> new RoleDto(
                         role.getId(),

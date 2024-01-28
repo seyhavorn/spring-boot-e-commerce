@@ -2,7 +2,7 @@ package com.seyhavorn.springbootecommerce.authentication.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.seyhavorn.springbootecommerce.authentication.dto.SignupDto;
+import com.seyhavorn.springbootecommerce.authentication.request.SignupRequest;
 import com.seyhavorn.springbootecommerce.authentication.dto.UserDto;
 import com.seyhavorn.springbootecommerce.authentication.entity.Role;
 import com.seyhavorn.springbootecommerce.authentication.entity.User;
@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public UserDetailsImpl createUser(SignupDto signupDto) throws JsonProcessingException {
+    public UserDetailsImpl createUser(SignupRequest signupDto) throws JsonProcessingException {
         if (userRepository.existsByUsername(signupDto.getUsername())) {
             throw new RuntimeException("Username already exists");
         }
