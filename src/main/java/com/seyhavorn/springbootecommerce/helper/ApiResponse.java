@@ -1,7 +1,5 @@
 package com.seyhavorn.springbootecommerce.helper;
 
-import lombok.Data;
-
 public record ApiResponse(boolean success, String message, Object data) {
 //    private boolean success;
 //    private String message;

@@ -1,10 +1,10 @@
 package com.seyhavorn.springbootecommerce.authentication.controller;
 
 import com.seyhavorn.springbootecommerce.authentication.dto.RoleDto;
-import com.seyhavorn.springbootecommerce.authentication.entity.Role;
 import com.seyhavorn.springbootecommerce.authentication.request.AddPermissionRoleRequest;
 import com.seyhavorn.springbootecommerce.authentication.service.RoleService;
 import com.seyhavorn.springbootecommerce.helper.ApiResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,16 +18,24 @@ public class RoleController {
     private final RoleService roleService;
 
     @PostMapping("/add")
-    public Role addRole(@RequestBody RoleDto roleDto) {
-        return roleService.addRole(roleDto.getName());
+    public ResponseEntity<ApiResponse> addRole(@RequestBody @Valid RoleDto roleDto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+                new ApiResponse(true, "Role has been added", roleService.addRole(roleDto.getName()))
+        );
     }
 
-    @PostMapping("/appPermissionToRole")
+    @GetMapping("/{roleId}")
+    public ResponseEntity<ApiResponse> getRoleById(@PathVariable("roleId") Long roleId) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+                new ApiResponse(true, "Success", roleService.findRoleById(roleId)));
+    }
+
+    @PostMapping("/addPermissionToRole")
     public ResponseEntity<?> addPermissionToRole(@RequestBody AddPermissionRoleRequest addPermissionRoleRequest) {
         Boolean addPermissionToRole = roleService.addPermissionToRole(addPermissionRoleRequest.getRole_id(), addPermissionRoleRequest.getPermission_id());
 
         return ResponseEntity.status(HttpStatus.CREATED).body(
-                new ApiResponse(true, "Permission added to roles", null)
+                new ApiResponse(addPermissionToRole, "Permission added to roles", null)
         );
     }
 

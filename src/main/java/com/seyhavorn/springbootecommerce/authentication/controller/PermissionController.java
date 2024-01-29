@@ -27,4 +27,19 @@ public class PermissionController {
     public ApiResponse list() {
         return new ApiResponse(true, "Permission added", permissionService.findAll());
     }
+
+    @GetMapping("/{permissionId}")
+    public ResponseEntity<ApiResponse> getPermissionById(@PathVariable("permissionId") Long permissionId) {
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ApiResponse(true, "Success", permissionService.getPermissionById(permissionId))
+        );
+    }
+
+    @DeleteMapping("/{permissionId}")
+    public ResponseEntity<ApiResponse> deletePermission(@PathVariable("permissionId") Long permissionId) {
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ApiResponse(true, "Success", permissionService.delete(permissionId))
+        );
+    }
+
 }
