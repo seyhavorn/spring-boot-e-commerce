@@ -9,9 +9,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PermissionResource {
+public class PermissionResource extends BaseResource{
     private Long id;
     private String name;
-    private Date createdAt;
-    private Date updatedAt;
 }

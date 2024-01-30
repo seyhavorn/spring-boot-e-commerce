@@ -10,10 +10,8 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RoleResource {
+public class RoleResource extends BaseResource{
     private Long id;
     private String name;
-    private Date createdAt;
-    private Date updatedAt;
     private List<PermissionResource> permissions;
 }
