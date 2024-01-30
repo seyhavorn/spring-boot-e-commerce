@@ -23,9 +23,9 @@ public class DataSeeder implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-//        createPermission();
-//        createRole();
-//        createUser();
+        createPermission();
+        createRole();
+        createUser();
     }
 
     private void createPermission() {

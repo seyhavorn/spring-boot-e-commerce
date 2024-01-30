@@ -13,6 +13,9 @@ import com.seyhavorn.springbootecommerce.authentication.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -36,21 +39,26 @@ public class UserServiceImpl implements UserService {
         if (userRepository.existsByUsername(signupDto.getUsername())) {
             throw new RuntimeException("Username already exists");
         }
+
         User user = userMapper.fromSignupDto(signupDto);
         user.setPassword(passwordEncoder.encode(signupDto.getPassword()));
-        user.setUser_object(objectMapper.writeValueAsString(signupDto));
         user.setFirstName(signupDto.getFirst_name());
         user.setLastName(signupDto.getLast_name());
         user.setEmail(signupDto.getEmail());
+        user.setUser_object(objectMapper.writeValueAsString(null));
         return new UserDetailsImpl(userRepository.save(user));
     }
 
     @Override
     public Boolean addRoleToUser(Long user_id, Long role_id) {
-        User user = userRepository.findById(user_id).orElseThrow(() -> new RuntimeException("User not found"));
-        Role role = roleRepository.findById(role_id).orElseThrow(() -> new RuntimeException("Role not found"));
-        user.assignRoleToUser(role);
-        userMapper.fromUserToDto(user);
+        try {
+            User user = userRepository.findById(user_id).orElseThrow(() -> new RuntimeException("User not found"));
+            Role role = roleRepository.findById(role_id).orElseThrow(() -> new RuntimeException("Role not found"));
+            user.assignRoleToUser(role);
+            userMapper.fromUserToDto(user);
+        } catch (Exception e) {
+
+        }
         return true;
     }
 
@@ -63,19 +71,34 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserByUsername(String username) {
-        return userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found"));
-    }
-
-    @Override
-    public List<UserResource> findAll() {
-        List<User> users = userRepository.findAll(Sort.by(Sort.Direction.ASC, "createdAt"));
-        return users.stream().map(userMapper::fromUserToUserResource).toList();
+    public UserResource getUserByUsername(String username) {
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found"));
+        return userMapper.fromUserToUserResource(user);
     }
 
     @Override
     public UserResource findUserById(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("user not found!"));
         return userMapper.fromUserToUserResource(user);
+    }
+
+    @Override
+    public Page<UserResource> getAllUsers(int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page, size);
+        Page<User> users = userRepository.findAll(pageRequest);
+        return new PageImpl<>(users.getContent().stream().map(userMapper::fromUserToUserResource).toList(), pageRequest, users.getTotalElements());
+    }
+
+    @Override
+    public UserResource create(SignupRequest signupRequest) {
+        if (userRepository.existsByUsername(signupRequest.getUsername())) {
+            throw new RuntimeException("Username already exists");
+        }
+        User user = userMapper.fromSignupDto(signupRequest);
+        user.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
+        user.setFirstName(signupRequest.getFirst_name());
+        user.setLastName(signupRequest.getLast_name());
+        user.setEmail(signupRequest.getEmail());
+        return userMapper.fromUserToUserResource(userRepository.save(user));
     }
 }
