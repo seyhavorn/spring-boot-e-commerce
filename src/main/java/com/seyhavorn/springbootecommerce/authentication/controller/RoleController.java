@@ -2,7 +2,9 @@ package com.seyhavorn.springbootecommerce.authentication.controller;
 
 import com.seyhavorn.springbootecommerce.authentication.dto.RoleDto;
 import com.seyhavorn.springbootecommerce.authentication.request.AddPermissionRoleRequest;
+import com.seyhavorn.springbootecommerce.authentication.request.RoleAndUserActionRequest;
 import com.seyhavorn.springbootecommerce.authentication.service.RoleService;
+import com.seyhavorn.springbootecommerce.authentication.service.UserService;
 import com.seyhavorn.springbootecommerce.helper.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 public class RoleController {
 
     private final RoleService roleService;
+    private final UserService userService;
 
     @PostMapping("/add")
     public ResponseEntity<ApiResponse> addRole(@RequestBody @Valid RoleDto roleDto) {
@@ -44,6 +47,22 @@ public class RoleController {
         Boolean removePermissionFromRole = roleService.removePermissionFromRole(addPermissionRoleRequest.getRole_id(), addPermissionRoleRequest.getPermission_id());
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 new ApiResponse(removePermissionFromRole, "Permission removed from role", null)
+        );
+    }
+
+    @PostMapping("/addRoleToUser")
+    public ResponseEntity<?> addRoleToUser(@RequestBody RoleAndUserActionRequest roleAndUserActionRequest) {
+        Boolean addRoleToUser = userService.addRoleToUser(roleAndUserActionRequest.getUser_id(), roleAndUserActionRequest.getRole_id());
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+                new ApiResponse(addRoleToUser, "Role added to user", null)
+        );
+    }
+
+    @PostMapping("/removeRoleFromUser")
+    public ResponseEntity<?> removeRoleFromUser(@RequestBody RoleAndUserActionRequest roleAndUserActionRequest) {
+        Boolean removeRoleFromUser = userService.removeRoleFromUser(roleAndUserActionRequest.getUser_id(), roleAndUserActionRequest.getUser_id());
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+                new ApiResponse(removeRoleFromUser, "Role removed from user", null)
         );
     }
 

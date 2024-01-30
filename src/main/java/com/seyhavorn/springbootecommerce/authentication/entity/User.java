@@ -41,7 +41,6 @@ public class User extends AuditableEntity {
     )
     private Set<Role> roles = new HashSet<>();
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

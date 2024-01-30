@@ -35,7 +35,7 @@ public class Permission extends AuditableEntity {
         return Objects.hash(id, name);
     }
 
-    @ManyToMany(mappedBy = "permissions", fetch = FetchType.EAGER, cascade = {CascadeType.REMOVE})
+    @ManyToMany(mappedBy = "permissions", fetch = FetchType.EAGER)
     @JsonIgnore
     private Set<Role> roles = new HashSet<>();
 }

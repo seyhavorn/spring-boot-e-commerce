@@ -51,6 +51,7 @@ public class PermissionServiceImpl implements PermissionService {
         for (Role role : permission.getRoles()) {
             role.getPermissions().remove(permission);
         }
+
         permissionRepository.delete(permission);
         return true;
     }

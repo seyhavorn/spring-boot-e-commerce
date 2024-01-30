@@ -1,13 +1,18 @@
 package com.seyhavorn.springbootecommerce.authentication.mapper;
 
-import com.seyhavorn.springbootecommerce.authentication.request.SignupRequest;
 import com.seyhavorn.springbootecommerce.authentication.dto.UserDto;
 import com.seyhavorn.springbootecommerce.authentication.entity.User;
+import com.seyhavorn.springbootecommerce.authentication.request.SignupRequest;
+import com.seyhavorn.springbootecommerce.authentication.resource.RoleResource;
+import com.seyhavorn.springbootecommerce.authentication.resource.UserResource;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserMapper {
+
     public SignupRequest fromUser(User user) {
         SignupRequest signupDto = new SignupRequest();
         BeanUtils.copyProperties(user, signupDto);
@@ -30,5 +35,22 @@ public class UserMapper {
         User user = new User();
         BeanUtils.copyProperties(userDto, user);
         return user;
+    }
+
+    public UserResource fromUserToUserResource(User user) {
+        UserResource userResource = new UserResource();
+        BeanUtils.copyProperties(user, userResource);
+
+        //roles list:
+        List<RoleResource> roles = user.getRoles()
+                .stream()
+                .map(role -> {
+                    RoleResource roleResource = new RoleResource();
+                    BeanUtils.copyProperties(role, roleResource);
+                    return roleResource;
+                }).toList();
+
+        userResource.setRoles(roles);
+        return userResource;
     }
 }

@@ -2,19 +2,22 @@ package com.seyhavorn.springbootecommerce.authentication.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.seyhavorn.springbootecommerce.authentication.request.SignupRequest;
-import com.seyhavorn.springbootecommerce.authentication.dto.UserDto;
 import com.seyhavorn.springbootecommerce.authentication.entity.Role;
 import com.seyhavorn.springbootecommerce.authentication.entity.User;
 import com.seyhavorn.springbootecommerce.authentication.mapper.UserMapper;
 import com.seyhavorn.springbootecommerce.authentication.repository.RoleRepository;
 import com.seyhavorn.springbootecommerce.authentication.repository.UserRepository;
+import com.seyhavorn.springbootecommerce.authentication.request.SignupRequest;
+import com.seyhavorn.springbootecommerce.authentication.resource.UserResource;
 import com.seyhavorn.springbootecommerce.authentication.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @Transactional
@@ -42,31 +45,37 @@ public class UserServiceImpl implements UserService {
         return new UserDetailsImpl(userRepository.save(user));
     }
 
-    public UserDto addRoleToUser(Long user_id, Long role_id) {
-        try {
-            User user = userRepository.findById(user_id).orElseThrow(() -> new RuntimeException("User not found"));
-            Role role = roleRepository.findById(role_id).orElseThrow(() -> new RuntimeException("Role not found"));
-            user.assignRoleToUser(role);
-            return userMapper.fromUserToDto(user);
-        } catch (Exception e) {
-            return null;
-        }
+    @Override
+    public Boolean addRoleToUser(Long user_id, Long role_id) {
+        User user = userRepository.findById(user_id).orElseThrow(() -> new RuntimeException("User not found"));
+        Role role = roleRepository.findById(role_id).orElseThrow(() -> new RuntimeException("Role not found"));
+        user.assignRoleToUser(role);
+        userMapper.fromUserToDto(user);
+        return true;
     }
 
     @Override
     public Boolean removeRoleFromUser(Long user_id, Long role_id) {
-        try {
-            User user = userRepository.findById(user_id).orElseThrow(() -> new RuntimeException("User not found"));
-            Role role = roleRepository.findById(role_id).orElseThrow(() -> new RuntimeException("Role not found"));
-            user.removeRoleFromUser(role);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+        User user = userRepository.findById(user_id).orElseThrow(() -> new RuntimeException("User not found"));
+        Role role = roleRepository.findById(role_id).orElseThrow(() -> new RuntimeException("Role not found"));
+        user.removeRoleFromUser(role);
+        return true;
     }
 
     @Override
-    public UserDto getUserByUsername(String username) {
-        return null;
+    public User getUserByUsername(String username) {
+        return userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+    @Override
+    public List<UserResource> findAll() {
+        List<User> users = userRepository.findAll(Sort.by(Sort.Direction.ASC, "createdAt"));
+        return users.stream().map(userMapper::fromUserToUserResource).toList();
+    }
+
+    @Override
+    public UserResource findUserById(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("user not found!"));
+        return userMapper.fromUserToUserResource(user);
     }
 }

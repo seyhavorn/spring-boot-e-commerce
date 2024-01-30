@@ -42,7 +42,7 @@ public class DataSeeder implements CommandLineRunner {
 
     private void createUser() throws JsonProcessingException {
         Faker faker = new Faker();
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 10; i++) {
             SignupRequest signupDto = new SignupRequest();
             signupDto.setUsername("test" + i);
             signupDto.setPassword("password");
