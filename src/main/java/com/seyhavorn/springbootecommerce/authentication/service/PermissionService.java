@@ -1,6 +1,6 @@
 package com.seyhavorn.springbootecommerce.authentication.service;
 
-import com.seyhavorn.springbootecommerce.authentication.resource.PermissionResource;
+import com.seyhavorn.springbootecommerce.authentication.dto.resource.PermissionResource;
 
 import java.util.List;
 

@@ -4,7 +4,7 @@ import com.seyhavorn.springbootecommerce.authentication.entity.Permission;
 import com.seyhavorn.springbootecommerce.authentication.entity.Role;
 import com.seyhavorn.springbootecommerce.authentication.mapper.PermissionMapper;
 import com.seyhavorn.springbootecommerce.authentication.repository.PermissionRepository;
-import com.seyhavorn.springbootecommerce.authentication.resource.PermissionResource;
+import com.seyhavorn.springbootecommerce.authentication.dto.resource.PermissionResource;
 import com.seyhavorn.springbootecommerce.authentication.service.PermissionService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;

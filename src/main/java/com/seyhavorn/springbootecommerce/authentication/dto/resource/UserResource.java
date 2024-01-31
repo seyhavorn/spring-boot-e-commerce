@@ -1,12 +1,10 @@
-package com.seyhavorn.springbootecommerce.authentication.resource;
+package com.seyhavorn.springbootecommerce.authentication.dto.resource;
 
-import com.seyhavorn.springbootecommerce.authentication.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.Objects;
 
 @Data
 @AllArgsConstructor

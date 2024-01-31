@@ -1,12 +1,10 @@
 package com.seyhavorn.springbootecommerce.authentication.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.seyhavorn.springbootecommerce.authentication.entity.User;
 import com.seyhavorn.springbootecommerce.authentication.mapper.UserMapper;
-import com.seyhavorn.springbootecommerce.authentication.request.LoginRequest;
-import com.seyhavorn.springbootecommerce.authentication.request.SignupRequest;
+import com.seyhavorn.springbootecommerce.authentication.dto.request.LoginRequest;
+import com.seyhavorn.springbootecommerce.authentication.dto.request.SignupRequest;
 import com.seyhavorn.springbootecommerce.authentication.dto.TokenDto;
-import com.seyhavorn.springbootecommerce.authentication.resource.UserResource;
 import com.seyhavorn.springbootecommerce.authentication.security.TokenGenerator;
 import com.seyhavorn.springbootecommerce.authentication.service.UserService;
 import com.seyhavorn.springbootecommerce.authentication.service.impl.UserDetailsImpl;

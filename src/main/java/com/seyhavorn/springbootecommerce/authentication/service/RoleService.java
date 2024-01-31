@@ -1,7 +1,7 @@
 package com.seyhavorn.springbootecommerce.authentication.service;
 
-import com.seyhavorn.springbootecommerce.authentication.entity.Role;
-import com.seyhavorn.springbootecommerce.authentication.resource.RoleResource;
+import com.seyhavorn.springbootecommerce.authentication.dto.FilterRoleDto;
+import com.seyhavorn.springbootecommerce.authentication.dto.resource.RoleResource;
 
 import java.util.List;
 
@@ -15,4 +15,6 @@ public interface RoleService {
     Boolean removePermissionFromRole(Long roleId, Long permissionId);
 
     List<RoleResource> findAll();
+
+    List<RoleResource> getAllRoles(FilterRoleDto filterRoleDto);
 }

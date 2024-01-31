@@ -4,13 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RoleDto {
-    private Long id;
+public class FilterRoleDto {
+    private String id;
     private String name;
-    private List<PermissionDto> permissions;
+    private String createdAt;
+    private String updatedAt;
 }

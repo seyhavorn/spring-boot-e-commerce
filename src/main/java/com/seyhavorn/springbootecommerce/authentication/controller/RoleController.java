@@ -1,8 +1,9 @@
 package com.seyhavorn.springbootecommerce.authentication.controller;
 
+import com.seyhavorn.springbootecommerce.authentication.dto.FilterRoleDto;
 import com.seyhavorn.springbootecommerce.authentication.dto.RoleDto;
-import com.seyhavorn.springbootecommerce.authentication.request.AddPermissionRoleRequest;
-import com.seyhavorn.springbootecommerce.authentication.request.RoleAndUserActionRequest;
+import com.seyhavorn.springbootecommerce.authentication.dto.request.AddPermissionRoleRequest;
+import com.seyhavorn.springbootecommerce.authentication.dto.request.RoleAndUserActionRequest;
 import com.seyhavorn.springbootecommerce.authentication.service.RoleService;
 import com.seyhavorn.springbootecommerce.authentication.service.UserService;
 import com.seyhavorn.springbootecommerce.helper.ApiResponse;
@@ -66,10 +67,10 @@ public class RoleController {
         );
     }
 
-    @GetMapping
-    public ResponseEntity<?> findAll() {
+    @PostMapping
+    public ResponseEntity<?> findAll(@RequestBody(required = false) FilterRoleDto filterRoleDto) {
         return ResponseEntity.status(HttpStatus.OK).body(
-                new ApiResponse(true, "Roles List", roleService.findAll())
+                new ApiResponse(true, "Roles List", roleService.getAllRoles(filterRoleDto))
         );
     }
 }

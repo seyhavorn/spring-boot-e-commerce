@@ -1,4 +1,4 @@
-package com.seyhavorn.springbootecommerce.authentication.request;
+package com.seyhavorn.springbootecommerce.authentication.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;

@@ -2,7 +2,7 @@ package com.seyhavorn.springbootecommerce.helper;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.javafaker.Faker;
-import com.seyhavorn.springbootecommerce.authentication.request.SignupRequest;
+import com.seyhavorn.springbootecommerce.authentication.dto.request.SignupRequest;
 import com.seyhavorn.springbootecommerce.authentication.service.PermissionService;
 import com.seyhavorn.springbootecommerce.authentication.service.RoleService;
 import com.seyhavorn.springbootecommerce.authentication.service.UserService;
@@ -23,9 +23,9 @@ public class DataSeeder implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        createPermission();
-        createRole();
-        createUser();
+//        createPermission();
+//        createRole();
+//        createUser();
     }
 
     private void createPermission() {

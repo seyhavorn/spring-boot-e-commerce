@@ -1,7 +1,8 @@
 package com.seyhavorn.springbootecommerce.authentication.controller;
 
-import com.seyhavorn.springbootecommerce.authentication.request.FindUserByUsername;
-import com.seyhavorn.springbootecommerce.authentication.request.SignupRequest;
+import com.seyhavorn.springbootecommerce.authentication.dto.FilterUserDto;
+import com.seyhavorn.springbootecommerce.authentication.dto.request.FindUserByUsername;
+import com.seyhavorn.springbootecommerce.authentication.dto.request.SignupRequest;
 import com.seyhavorn.springbootecommerce.authentication.service.UserService;
 import com.seyhavorn.springbootecommerce.helper.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -30,15 +31,18 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getAllUsers(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "10") int size) {
-        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(true, "User List", userService.getAllUsers(page, size)));
+    public ResponseEntity<?> getAllUsers(@RequestBody(required = false) FilterUserDto filterUserDto, @RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "10") int size) {
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(true, "User List", userService.getAllUsers(page, size, filterUserDto)));
     }
 
     @PostMapping
     @PreAuthorize("hasAnyRole('ROLE_Admin')")
     public ResponseEntity<?> createUser(@RequestBody SignupRequest signupRequest) {
-        return ResponseEntity.status(HttpStatus.OK).body(
-                new ApiResponse(true, "User created", userService.create(signupRequest))
-        );
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(true, "User created", userService.create(signupRequest)));
+    }
+
+    @GetMapping("/testRecord")
+    public ResponseEntity<?> listUserTestRecord() {
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(true, "User created", userService.listUsers()));
     }
 }

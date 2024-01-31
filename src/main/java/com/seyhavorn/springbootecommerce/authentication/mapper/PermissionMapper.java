@@ -1,7 +1,7 @@
 package com.seyhavorn.springbootecommerce.authentication.mapper;
 
 import com.seyhavorn.springbootecommerce.authentication.entity.Permission;
-import com.seyhavorn.springbootecommerce.authentication.resource.PermissionResource;
+import com.seyhavorn.springbootecommerce.authentication.dto.resource.PermissionResource;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
