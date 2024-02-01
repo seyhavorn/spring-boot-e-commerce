@@ -7,6 +7,8 @@ import com.seyhavorn.springbootecommerce.authentication.dto.request.SignupReques
 import com.seyhavorn.springbootecommerce.authentication.service.UserService;
 import com.seyhavorn.springbootecommerce.helper.ApiResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
+@EnableCaching
 public class UserController {
 
     private final UserService userService;

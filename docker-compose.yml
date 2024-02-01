@@ -1,0 +1,17 @@
+version: '3.8'
+services:
+  cache:
+    image: redis/redis-stack-server:latest
+    restart: always
+    ports:
+      - "6379:6379"
+    command: redis-server --requirepass password --loglevel warning
+    volumes:
+      - cache:/data
+    environment:
+      - REDIS_PASSWORD=password
+      - REDIS_PORT=6379
+      - REDIS_DATABASES=16
+volumes:
+  cache:
+    driver: local

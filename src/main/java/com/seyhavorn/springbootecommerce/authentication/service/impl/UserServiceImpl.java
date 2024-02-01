@@ -15,10 +15,10 @@ import com.seyhavorn.springbootecommerce.authentication.repository.UserRepositor
 import com.seyhavorn.springbootecommerce.authentication.service.UserService;
 import com.seyhavorn.springbootecommerce.authentication.specifications.FilterSpecificationService;
 import com.seyhavorn.springbootecommerce.authentication.specifications.UserFilterSpecification;
-import io.micrometer.common.KeyValues;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -64,7 +64,7 @@ public class UserServiceImpl implements UserService {
             user.assignRoleToUser(role);
             userMapper.fromUserToDto(user);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            return false;
         }
         return true;
     }
@@ -114,12 +114,14 @@ public class UserServiceImpl implements UserService {
         this method for list User with: record Dto:
      */
     @Override
+    @Cacheable("listUsers")
     public List<ListUserDto> listUsers() {
         List<User> users = userRepository.findAll();
         return users.stream().map(ListUserDto::fromUser).toList();
     }
 
     //Test User with Query:
+    @Cacheable(value = "users")
     public Page<UserResource> userWithFirstName(int page, int size, UserFilterRequestDto userFilterRequestDto) {
         Page<User> users;
         PageRequest pageRequest = PageRequest.of(page, size);
