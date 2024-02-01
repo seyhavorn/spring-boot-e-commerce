@@ -1,13 +1,10 @@
 package com.seyhavorn.springbootecommerce.authentication.dto.resource;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.EqualsAndHashCode;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class PermissionResource extends BaseResource{
-    private Long id;
     private String name;
 }

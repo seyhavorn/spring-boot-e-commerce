@@ -24,7 +24,7 @@ public class UserManagerImpl implements UserDetailsManager {
 
     @Override
     public void updateUser(UserDetails user) {
-
+        userRepository.save((User) user);
     }
 
     @Override
@@ -34,7 +34,18 @@ public class UserManagerImpl implements UserDetailsManager {
 
     @Override
     public void changePassword(String oldPassword, String newPassword) {
+        /*
+         fill the use from:
+        User currentUser = (User) userRepository.findByUsername();
 
+        if (passwordEncoder.matches(oldPassword, currentUser.getPassword())) {
+            currentUser.setPassword(passwordEncoder.encode(newPassword));
+            userRepository.save(currentUser);
+        } else {
+            // Handle incorrect old password
+            throw new IllegalArgumentException("Incorrect old password");
+        }
+        */
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.seyhavorn.springbootecommerce.authentication.controller;
 
 import com.seyhavorn.springbootecommerce.authentication.dto.FilterUserDto;
+import com.seyhavorn.springbootecommerce.authentication.dto.UserFilterRequestDto;
 import com.seyhavorn.springbootecommerce.authentication.dto.request.FindUserByUsername;
 import com.seyhavorn.springbootecommerce.authentication.dto.request.SignupRequest;
 import com.seyhavorn.springbootecommerce.authentication.service.UserService;
@@ -41,8 +42,13 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(true, "User created", userService.create(signupRequest)));
     }
 
-    @GetMapping("/testRecord")
-    public ResponseEntity<?> listUserTestRecord() {
-        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(true, "User created", userService.listUsers()));
+    @PostMapping("/dynamicParam")
+    public ResponseEntity<?> listUserTestRecord(
+            @RequestBody(required = false) UserFilterRequestDto userFilterRequestDto,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "10") int size
+    ) {
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(true, "User retrieved",
+                userService.userWithFirstName(page, size, userFilterRequestDto)));
     }
 }

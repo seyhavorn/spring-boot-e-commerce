@@ -3,16 +3,19 @@ package com.seyhavorn.springbootecommerce.authentication.service.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seyhavorn.springbootecommerce.authentication.dto.FilterUserDto;
+import com.seyhavorn.springbootecommerce.authentication.dto.UserFilterRequestDto;
+import com.seyhavorn.springbootecommerce.authentication.dto.record.ListUserDto;
+import com.seyhavorn.springbootecommerce.authentication.dto.request.SignupRequest;
+import com.seyhavorn.springbootecommerce.authentication.dto.resource.UserResource;
 import com.seyhavorn.springbootecommerce.authentication.entity.Role;
 import com.seyhavorn.springbootecommerce.authentication.entity.User;
 import com.seyhavorn.springbootecommerce.authentication.mapper.UserMapper;
 import com.seyhavorn.springbootecommerce.authentication.repository.RoleRepository;
 import com.seyhavorn.springbootecommerce.authentication.repository.UserRepository;
-import com.seyhavorn.springbootecommerce.authentication.dto.request.SignupRequest;
-import com.seyhavorn.springbootecommerce.authentication.dto.record.ListUserDto;
-import com.seyhavorn.springbootecommerce.authentication.dto.resource.UserResource;
 import com.seyhavorn.springbootecommerce.authentication.service.UserService;
+import com.seyhavorn.springbootecommerce.authentication.specifications.FilterSpecificationService;
 import com.seyhavorn.springbootecommerce.authentication.specifications.UserFilterSpecification;
+import io.micrometer.common.KeyValues;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +39,7 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final ObjectMapper objectMapper;
     private final PasswordEncoder passwordEncoder;
+    private final FilterSpecificationService<User> filterSpecificationService;
 
     @Override
     public UserDetailsImpl createUser(SignupRequest signupDto) throws JsonProcessingException {
@@ -113,6 +117,20 @@ public class UserServiceImpl implements UserService {
     public List<ListUserDto> listUsers() {
         List<User> users = userRepository.findAll();
         return users.stream().map(ListUserDto::fromUser).toList();
+    }
+
+    //Test User with Query:
+    public Page<UserResource> userWithFirstName(int page, int size, UserFilterRequestDto userFilterRequestDto) {
+        Page<User> users;
+        PageRequest pageRequest = PageRequest.of(page, size);
+
+        if (userFilterRequestDto != null) {
+            Specification<User> spec = filterSpecificationService.filterSpecification(userFilterRequestDto.getSearchRequestDtoList(), userFilterRequestDto.getGlobalOperator());
+            users = userRepository.findAll(spec, pageRequest);
+        }
+        users = userRepository.findAll(pageRequest);
+
+        return new PageImpl<>(users.getContent().stream().map(userMapper::fromUserToUserResource).toList(), pageRequest, users.getTotalElements());
     }
 
 }
