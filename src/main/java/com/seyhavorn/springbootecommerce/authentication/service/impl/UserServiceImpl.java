@@ -114,14 +114,12 @@ public class UserServiceImpl implements UserService {
         this method for list User with: record Dto:
      */
     @Override
-    @Cacheable("listUsers")
     public List<ListUserDto> listUsers() {
         List<User> users = userRepository.findAll();
         return users.stream().map(ListUserDto::fromUser).toList();
     }
 
     //Test User with Query:
-    @Cacheable(value = "users")
     public Page<UserResource> userWithFirstName(int page, int size, UserFilterRequestDto userFilterRequestDto) {
         Page<User> users;
         PageRequest pageRequest = PageRequest.of(page, size);

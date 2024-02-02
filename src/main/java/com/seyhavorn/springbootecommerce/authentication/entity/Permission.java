@@ -11,9 +11,9 @@ import java.util.Set;
 
 @Entity
 @Table(name = "permissions")
-@RequiredArgsConstructor
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Permission extends AuditableEntity {
 
     @Id

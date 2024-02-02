@@ -3,19 +3,16 @@ package com.seyhavorn.springbootecommerce.authentication.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.seyhavorn.springbootecommerce.helper.AuditableEntity;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Getter
-@Setter
-@RequiredArgsConstructor
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "roles")
 public class Role extends AuditableEntity {
 
