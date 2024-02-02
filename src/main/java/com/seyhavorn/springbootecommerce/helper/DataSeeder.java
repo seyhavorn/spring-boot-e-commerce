@@ -2,10 +2,12 @@ package com.seyhavorn.springbootecommerce.helper;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.javafaker.Faker;
-import com.seyhavorn.springbootecommerce.authentication.dto.request.SignupRequest;
+import com.seyhavorn.springbootecommerce.authentication.dto.request.SignupRequestDto;
 import com.seyhavorn.springbootecommerce.authentication.service.PermissionService;
 import com.seyhavorn.springbootecommerce.authentication.service.RoleService;
 import com.seyhavorn.springbootecommerce.authentication.service.UserService;
+import com.seyhavorn.springbootecommerce.shop.dto.request.CustomerRequestDto;
+import com.seyhavorn.springbootecommerce.shop.service.CustomerService;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -20,12 +22,14 @@ public class DataSeeder implements CommandLineRunner {
     private final PermissionService permissionService;
     private final RoleService roleService;
     private final UserService userService;
+    private final CustomerService customerService;
 
     @Override
     public void run(String... args) throws Exception {
         createPermission();
         createRole();
         createUser();
+        crateCustomer();
     }
 
     private void createPermission() {
@@ -42,8 +46,8 @@ public class DataSeeder implements CommandLineRunner {
 
     private void createUser() throws JsonProcessingException {
         Faker faker = new Faker();
-        for (int i = 0; i < 100; i++) {
-            SignupRequest signupDto = new SignupRequest();
+        for (int i = 0; i < 10; i++) {
+            SignupRequestDto signupDto = new SignupRequestDto();
             signupDto.setUsername("test" + i);
             signupDto.setPassword("password");
             signupDto.setFirst_name(faker.name().firstName());
@@ -52,6 +56,17 @@ public class DataSeeder implements CommandLineRunner {
             userService.createUser(signupDto);
             Random random = new Random();
             userService.addRoleToUser((long) i, random.nextLong(4));
+        }
+    }
+
+    private void crateCustomer() throws JsonProcessingException {
+        Faker faker = new Faker();
+        for (int i = 0; i < 1000; i++) {
+            CustomerRequestDto customerRequestDto = new CustomerRequestDto();
+            customerRequestDto.setName(faker.name().fullName());
+            customerRequestDto.setUsername(faker.name().username());
+            customerRequestDto.setEmail(faker.internet().emailAddress());
+            customerService.create(customerRequestDto);
         }
     }
 }

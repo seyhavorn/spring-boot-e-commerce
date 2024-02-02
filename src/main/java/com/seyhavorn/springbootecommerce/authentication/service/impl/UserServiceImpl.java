@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seyhavorn.springbootecommerce.authentication.dto.FilterUserDto;
 import com.seyhavorn.springbootecommerce.authentication.dto.UserFilterRequestDto;
 import com.seyhavorn.springbootecommerce.authentication.dto.record.ListUserDto;
-import com.seyhavorn.springbootecommerce.authentication.dto.request.SignupRequest;
+import com.seyhavorn.springbootecommerce.authentication.dto.request.SignupRequestDto;
 import com.seyhavorn.springbootecommerce.authentication.dto.resource.UserResource;
 import com.seyhavorn.springbootecommerce.authentication.entity.Role;
 import com.seyhavorn.springbootecommerce.authentication.entity.User;
@@ -18,7 +18,6 @@ import com.seyhavorn.springbootecommerce.authentication.specifications.UserFilte
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -42,7 +41,7 @@ public class UserServiceImpl implements UserService {
     private final FilterSpecificationService<User> filterSpecificationService;
 
     @Override
-    public UserDetailsImpl createUser(SignupRequest signupDto) throws JsonProcessingException {
+    public UserDetailsImpl createUser(SignupRequestDto signupDto) throws JsonProcessingException {
         if (userRepository.existsByUsername(signupDto.getUsername())) {
             throw new RuntimeException("Username already exists");
         }
@@ -98,7 +97,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResource create(SignupRequest signupRequest) {
+    public UserResource create(SignupRequestDto signupRequest) {
         if (userRepository.existsByUsername(signupRequest.getUsername())) {
             throw new RuntimeException("Username already exists");
         }
@@ -120,6 +119,7 @@ public class UserServiceImpl implements UserService {
     }
 
     //Test User with Query:
+    @Override
     public Page<UserResource> userWithFirstName(int page, int size, UserFilterRequestDto userFilterRequestDto) {
         Page<User> users;
         PageRequest pageRequest = PageRequest.of(page, size);

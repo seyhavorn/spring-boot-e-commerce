@@ -2,8 +2,8 @@ package com.seyhavorn.springbootecommerce.authentication.controller;
 
 import com.seyhavorn.springbootecommerce.authentication.dto.FilterUserDto;
 import com.seyhavorn.springbootecommerce.authentication.dto.UserFilterRequestDto;
-import com.seyhavorn.springbootecommerce.authentication.dto.request.FindUserByUsername;
-import com.seyhavorn.springbootecommerce.authentication.dto.request.SignupRequest;
+import com.seyhavorn.springbootecommerce.authentication.dto.request.FindUserByUsernameDto;
+import com.seyhavorn.springbootecommerce.authentication.dto.request.SignupRequestDto;
 import com.seyhavorn.springbootecommerce.authentication.service.UserService;
 import com.seyhavorn.springbootecommerce.helper.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,7 @@ public class UserController {
 
     @PostMapping("/username")
     //@PreAuthorize("hasAnyAuthority('user_access')")
-    public ResponseEntity<?> getUserByUsername(@RequestBody FindUserByUsername request) {
+    public ResponseEntity<?> getUserByUsername(@RequestBody FindUserByUsernameDto request) {
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(true, "User", userService.getUserByUsername(request.getUsername())));
     }
 
@@ -38,7 +38,7 @@ public class UserController {
 
     @PostMapping
     @PreAuthorize("hasAnyRole('ROLE_Admin')")
-    public ResponseEntity<?> createUser(@RequestBody SignupRequest signupRequest) {
+    public ResponseEntity<?> createUser(@RequestBody SignupRequestDto signupRequest) {
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(true, "User created", userService.create(signupRequest)));
     }
 

@@ -11,7 +11,7 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SignupRequest {
+public class SignupRequestDto {
     private String username;
     private String password;
     private String first_name;

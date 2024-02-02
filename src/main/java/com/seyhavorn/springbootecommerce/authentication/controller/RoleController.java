@@ -2,8 +2,8 @@ package com.seyhavorn.springbootecommerce.authentication.controller;
 
 import com.seyhavorn.springbootecommerce.authentication.dto.FilterRoleDto;
 import com.seyhavorn.springbootecommerce.authentication.dto.RoleDto;
-import com.seyhavorn.springbootecommerce.authentication.dto.request.AddPermissionRoleRequest;
-import com.seyhavorn.springbootecommerce.authentication.dto.request.RoleAndUserActionRequest;
+import com.seyhavorn.springbootecommerce.authentication.dto.request.AddPermissionRoleRequestDto;
+import com.seyhavorn.springbootecommerce.authentication.dto.request.RoleAndUserActionRequestDto;
 import com.seyhavorn.springbootecommerce.authentication.service.RoleService;
 import com.seyhavorn.springbootecommerce.authentication.service.UserService;
 import com.seyhavorn.springbootecommerce.helper.ApiResponse;
@@ -35,7 +35,7 @@ public class RoleController {
     }
 
     @PostMapping("/addPermissionToRole")
-    public ResponseEntity<?> addPermissionToRole(@RequestBody AddPermissionRoleRequest addPermissionRoleRequest) {
+    public ResponseEntity<?> addPermissionToRole(@RequestBody AddPermissionRoleRequestDto addPermissionRoleRequest) {
         Boolean addPermissionToRole = roleService.addPermissionToRole(addPermissionRoleRequest.getRole_id(), addPermissionRoleRequest.getPermission_id());
 
         return ResponseEntity.status(HttpStatus.CREATED).body(
@@ -44,7 +44,7 @@ public class RoleController {
     }
 
     @PostMapping("/removePermissionFromRole")
-    public ResponseEntity<?> removePermissionFromRole(@RequestBody AddPermissionRoleRequest addPermissionRoleRequest) {
+    public ResponseEntity<?> removePermissionFromRole(@RequestBody AddPermissionRoleRequestDto addPermissionRoleRequest) {
         Boolean removePermissionFromRole = roleService.removePermissionFromRole(addPermissionRoleRequest.getRole_id(), addPermissionRoleRequest.getPermission_id());
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 new ApiResponse(removePermissionFromRole, "Permission removed from role", null)
@@ -52,7 +52,7 @@ public class RoleController {
     }
 
     @PostMapping("/addRoleToUser")
-    public ResponseEntity<?> addRoleToUser(@RequestBody RoleAndUserActionRequest roleAndUserActionRequest) {
+    public ResponseEntity<?> addRoleToUser(@RequestBody RoleAndUserActionRequestDto roleAndUserActionRequest) {
         Boolean addRoleToUser = userService.addRoleToUser(roleAndUserActionRequest.getUser_id(), roleAndUserActionRequest.getRole_id());
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 new ApiResponse(addRoleToUser, "Role added to user", null)
@@ -60,7 +60,7 @@ public class RoleController {
     }
 
     @PostMapping("/removeRoleFromUser")
-    public ResponseEntity<?> removeRoleFromUser(@RequestBody RoleAndUserActionRequest roleAndUserActionRequest) {
+    public ResponseEntity<?> removeRoleFromUser(@RequestBody RoleAndUserActionRequestDto roleAndUserActionRequest) {
         Boolean removeRoleFromUser = userService.removeRoleFromUser(roleAndUserActionRequest.getUser_id(), roleAndUserActionRequest.getUser_id());
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 new ApiResponse(removeRoleFromUser, "Role removed from user", null)

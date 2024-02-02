@@ -1,5 +1,6 @@
 package com.seyhavorn.springbootecommerce.authentication.dto.resource;
 
+import com.seyhavorn.springbootecommerce.helper.BaseResource;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

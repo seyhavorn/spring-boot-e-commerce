@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.seyhavorn.springbootecommerce.authentication.dto.FilterUserDto;
 import com.seyhavorn.springbootecommerce.authentication.dto.UserFilterRequestDto;
 import com.seyhavorn.springbootecommerce.authentication.dto.record.ListUserDto;
-import com.seyhavorn.springbootecommerce.authentication.dto.request.SignupRequest;
+import com.seyhavorn.springbootecommerce.authentication.dto.request.SignupRequestDto;
 import com.seyhavorn.springbootecommerce.authentication.dto.resource.UserResource;
 import com.seyhavorn.springbootecommerce.authentication.service.impl.UserDetailsImpl;
 import org.springframework.data.domain.Page;
@@ -12,7 +12,7 @@ import org.springframework.data.domain.Page;
 import java.util.List;
 
 public interface UserService {
-    UserDetailsImpl createUser(SignupRequest signupDto) throws JsonProcessingException;
+    UserDetailsImpl createUser(SignupRequestDto signupDto) throws JsonProcessingException;
 
     Boolean addRoleToUser(Long user_id, Long role_id);
 
@@ -24,7 +24,7 @@ public interface UserService {
 
     Page<UserResource> getAllUsers(int page, int size, FilterUserDto filterUserDto);
 
-    UserResource create(SignupRequest signupRequest);
+    UserResource create(SignupRequestDto signupRequest);
 
     List<ListUserDto> listUsers();
 
