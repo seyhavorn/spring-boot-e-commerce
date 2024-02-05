@@ -1,5 +1,6 @@
 package com.seyhavorn.springbootecommerce.shop.mapper;
 
+import com.seyhavorn.springbootecommerce.shop.dto.request.CustomerRequestDto;
 import com.seyhavorn.springbootecommerce.shop.dto.resources.CustomerResourceDto;
 import com.seyhavorn.springbootecommerce.shop.entity.Customer;
 import org.springframework.beans.BeanUtils;
@@ -11,5 +12,11 @@ public class CustomerMapper {
         CustomerResourceDto customerResourceDto = new CustomerResourceDto();
         BeanUtils.copyProperties(customer, customerResourceDto);
         return customerResourceDto;
+    }
+
+    public Customer customerToCustomerRequestDto(CustomerRequestDto customerRequestDto) {
+        Customer customer = new Customer();
+        BeanUtils.copyProperties(customerRequestDto, customer);
+        return customer;
     }
 }

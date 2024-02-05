@@ -17,8 +17,8 @@ public class CustomerController {
     private final CustomerService customerService;
 
     @GetMapping
-    public ResponseEntity<?> list() {
-        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(true, "Customers list", customerService.findAll()));
+    public ResponseEntity<?> list(@RequestParam(value = "page", required = false, defaultValue = "0") int page, @RequestParam(value = "size", required = false, defaultValue = "10") int size) {
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(true, "Customers list", customerService.findAll(page, size)));
     }
 
     @PostMapping
@@ -29,6 +29,11 @@ public class CustomerController {
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable("id") Long customerId) {
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(true, "success", customerService.findById(customerId)));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(@PathVariable("id") Long customerId, @RequestBody() CustomerRequestDto customerRequestDto) {
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(true, "success", customerService.update(customerRequestDto, customerId)));
     }
 
     @DeleteMapping("/{id}")

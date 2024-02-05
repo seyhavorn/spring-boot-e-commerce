@@ -3,15 +3,16 @@ package com.seyhavorn.springbootecommerce.shop.service;
 import com.seyhavorn.springbootecommerce.shop.dto.request.CustomerRequestDto;
 import com.seyhavorn.springbootecommerce.shop.dto.resources.CustomerResourceDto;
 import com.seyhavorn.springbootecommerce.shop.entity.Customer;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 public interface CustomerService {
-    List<CustomerResourceDto> findAll();
+    Page<CustomerResourceDto> findAll(int page, int size);
 
     Customer create(CustomerRequestDto customerRequestDto);
 
+    Customer update(CustomerRequestDto customerRequestDto, Long id);
+
     CustomerResourceDto findById(Long id);
 
-    Boolean deleteCustomer(Long id);
+    void deleteCustomer(Long id);
 }

@@ -9,13 +9,15 @@ import com.seyhavorn.springbootecommerce.shop.service.CustomerService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.Cache;
-import org.springframework.cache.CacheManager;
+import org.springframework.beans.BeanUtils;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -25,13 +27,13 @@ public class CustomerServiceImpl implements CustomerService {
 
     private final CustomRepository customRepository;
     private final CustomerMapper customerMapper;
-    private final CacheManager cacheManager;
 
     @Override
-    @Cacheable(value = "customers")
-    public List<CustomerResourceDto> findAll() {
-        List<Customer> customers = customRepository.findAll();
-        return customers.stream().map(customerMapper::customerToCustomerResources).toList();
+    @Cacheable("customers")
+    public Page<CustomerResourceDto> findAll(int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page, size);
+        Page<Customer> customers = customRepository.findAll(pageRequest);
+        return new PageImpl<>(customers.getContent().stream().map(customerMapper::customerToCustomerResources).collect(Collectors.toList()), pageRequest, customers.getTotalElements());
     }
 
     @Override
@@ -54,6 +56,28 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    @CacheEvict(value = "customers", allEntries = true)
+    public Customer update(CustomerRequestDto customerRequestDto, Long id) {
+        Customer customer = customRepository.findById(id).orElseThrow(() -> new RuntimeException("Customer not found!"));
+        BeanUtils.copyProperties(customerRequestDto, customer);
+
+        if (customerRequestDto.getName() != null) {
+            customerRequestDto.setName(customerRequestDto.getName());
+        }
+
+        if (customerRequestDto.getUsername() != null) {
+            customerRequestDto.setName(customerRequestDto.getUsername());
+        }
+
+        if (customerRequestDto.getEmail() != null) {
+            customerRequestDto.setName(customerRequestDto.getEmail());
+        }
+
+        customer = customRepository.save(customer);
+        return customer;
+    }
+
+    @Override
     @Cacheable(value = "customers", key = "#id")
     public CustomerResourceDto findById(Long id) {
         Customer customer = customRepository.findById(id).orElseThrow(() -> new RuntimeException("Customer not found!"));
@@ -61,14 +85,9 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    @CacheEvict(value = "customers", key = "#id")
-    public Boolean deleteCustomer(Long id) {
+    @CacheEvict(value = "customers", key = "#id", allEntries = false)
+    public void deleteCustomer(Long id) {
         customRepository.findById(id).orElseThrow(() -> new RuntimeException("Customer not found!"));
-        Cache cache = cacheManager.getCache("customers");
-        if (cache != null) {
-            cache.evict(id);
-        }
         customRepository.deleteById(id);
-        return null;
     }
 }
