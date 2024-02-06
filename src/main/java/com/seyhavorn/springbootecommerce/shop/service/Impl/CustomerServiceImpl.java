@@ -73,6 +73,10 @@ public class CustomerServiceImpl implements CustomerService {
             customerRequestDto.setName(customerRequestDto.getEmail());
         }
 
+        /*
+            This it my first time on this project to do another day with this. I really want to buy some clothes for good staff.
+            I have do a lot of task for my career
+         */
         customer = customRepository.save(customer);
         return customer;
     }
