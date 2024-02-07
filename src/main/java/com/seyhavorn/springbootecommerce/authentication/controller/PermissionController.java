@@ -4,6 +4,7 @@ import com.seyhavorn.springbootecommerce.authentication.dto.PermissionDto;
 import com.seyhavorn.springbootecommerce.authentication.service.PermissionService;
 import com.seyhavorn.springbootecommerce.helper.ApiResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/permissions")
 @RequiredArgsConstructor
+@EnableCaching
 public class PermissionController {
 
     private final PermissionService permissionService;

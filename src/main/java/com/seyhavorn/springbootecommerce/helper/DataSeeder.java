@@ -6,7 +6,9 @@ import com.seyhavorn.springbootecommerce.authentication.dto.request.SignupReques
 import com.seyhavorn.springbootecommerce.authentication.service.PermissionService;
 import com.seyhavorn.springbootecommerce.authentication.service.RoleService;
 import com.seyhavorn.springbootecommerce.authentication.service.UserService;
+import com.seyhavorn.springbootecommerce.shop.dto.request.CategoryRequestDto;
 import com.seyhavorn.springbootecommerce.shop.dto.request.CustomerRequestDto;
+import com.seyhavorn.springbootecommerce.shop.service.CategoryService;
 import com.seyhavorn.springbootecommerce.shop.service.CustomerService;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
@@ -23,6 +25,7 @@ public class DataSeeder implements CommandLineRunner {
     private final RoleService roleService;
     private final UserService userService;
     private final CustomerService customerService;
+    private final CategoryService categoryService;
 
     @Override
     public void run(String... args) throws Exception {
@@ -30,6 +33,7 @@ public class DataSeeder implements CommandLineRunner {
 //        createRole();
 //        createUser();
 //        crateCustomer();
+//        createCategories();
     }
 
     private void createPermission() {
@@ -46,7 +50,7 @@ public class DataSeeder implements CommandLineRunner {
 
     private void createUser() throws JsonProcessingException {
         Faker faker = new Faker();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 30; i++) {
             SignupRequestDto signupDto = new SignupRequestDto();
             signupDto.setUsername("test" + i);
             signupDto.setPassword("password");
@@ -67,6 +71,17 @@ public class DataSeeder implements CommandLineRunner {
             customerRequestDto.setUsername(faker.name().username());
             customerRequestDto.setEmail(faker.internet().emailAddress());
             customerService.create(customerRequestDto);
+        }
+    }
+
+    private void createCategories() {
+        Faker faker = new Faker();
+        for (int i = 0; i < 1000; i++) {
+            CategoryRequestDto categoryRequestDto = new CategoryRequestDto();
+            categoryRequestDto.setName(faker.name().fullName());
+            categoryRequestDto.setDescription(faker.name().title());
+            categoryRequestDto.setImageUrl(faker.internet().image());
+            categoryService.create(categoryRequestDto);
         }
     }
 }

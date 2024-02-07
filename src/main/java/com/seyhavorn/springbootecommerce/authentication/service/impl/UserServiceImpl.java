@@ -18,6 +18,7 @@ import com.seyhavorn.springbootecommerce.authentication.specifications.UserFilte
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -51,7 +52,7 @@ public class UserServiceImpl implements UserService {
         user.setFirstName(signupDto.getFirst_name());
         user.setLastName(signupDto.getLast_name());
         user.setEmail(signupDto.getEmail());
-        user.setUser_object(objectMapper.writeValueAsString(null));
+        user.setUser_object(objectMapper.writeValueAsString(user));
         return new UserDetailsImpl(userRepository.save(user));
     }
 
@@ -89,6 +90,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+//    @Cacheable("users")
     public Page<UserResource> getAllUsers(int page, int size, FilterUserDto filterUserDto) {
         Specification<User> specification = UserFilterSpecification.filter(filterUserDto);
         PageRequest pageRequest = PageRequest.of(page, size);
@@ -120,6 +122,7 @@ public class UserServiceImpl implements UserService {
 
     //Test User with Query:
     @Override
+    @Cacheable("users")
     public Page<UserResource> userWithFirstName(int page, int size, UserFilterRequestDto userFilterRequestDto) {
         Page<User> users;
         PageRequest pageRequest = PageRequest.of(page, size);

@@ -13,6 +13,7 @@ import com.seyhavorn.springbootecommerce.authentication.service.RoleService;
 import com.seyhavorn.springbootecommerce.authentication.specifications.RoleFilterSpecifications;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -39,6 +40,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    @Cacheable(value = "roles", key = "#roleId")
     public RoleResource findRoleById(Long roleId) {
         Role role = roleRepository.findById(roleId).orElseThrow(() -> new RuntimeException("Role not found"));
         return roleMapper.roleToRoleResource(role);
@@ -65,6 +67,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    @Cacheable("roles")
     public List<RoleResource> findAll() {
         List<Role> roles = roleRepository.findAll(Sort.by(Sort.Direction.ASC, "name"));
         return roles.stream().map(roleMapper::roleToRoleResource).toList();
@@ -73,17 +76,12 @@ public class RoleServiceImpl implements RoleService {
     //Method didn't use Mapper:
     private List<RoleDto> listRole() {
         List<Role> roles = roleRepository.findAll(Sort.by(Sort.Direction.ASC, "name"));
-        return roles.stream()
-                .map(role ->
-                        new RoleDto(role.getId(), role.getName(), role.getPermissions()
-                                .stream()
-                                .map(permission -> new PermissionDto(permission.getId(), permission.getName()))
-                                .toList()))
-                .toList();
+        return roles.stream().map(role -> new RoleDto(role.getId(), role.getName(), role.getPermissions().stream().map(permission -> new PermissionDto(permission.getId(), permission.getName())).toList())).toList();
     }
 
+    @Override
+    @Cacheable("roles")
     public List<RoleResource> getAllRoles(FilterRoleDto filterRoleDto) {
-
         Specification<Role> spec = RoleFilterSpecifications.filter(filterRoleDto);
         List<Role> roles = roleRepository.findAll(spec);
         return roles.stream().map(roleMapper::roleToRoleResource).toList();

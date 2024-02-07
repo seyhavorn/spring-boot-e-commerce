@@ -8,7 +8,7 @@ import org.springframework.data.domain.Page;
 public interface CustomerService {
     Page<CustomerResourceDto> findAll(int page, int size);
 
-    Customer create(CustomerRequestDto customerRequestDto);
+    CustomerResourceDto create(CustomerRequestDto customerRequestDto);
 
     Customer update(CustomerRequestDto customerRequestDto, Long id);
 

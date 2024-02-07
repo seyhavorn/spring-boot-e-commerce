@@ -38,18 +38,15 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     @CacheEvict(value = "customers", allEntries = true)
-    public Customer create(CustomerRequestDto customerRequestDto) {
+    public CustomerResourceDto create(CustomerRequestDto customerRequestDto) {
         try {
             if (customRepository.existsByUsername(customerRequestDto.getUsername())) {
                 throw new RuntimeException("Customer already exists");
             }
-
-            Customer customer = new Customer();
-            customer.setName(customerRequestDto.getName());
-            customer.setUsername(customerRequestDto.getUsername());
-            customer.setEmail(customerRequestDto.getEmail());
-            return customRepository.save(customer);
-        } catch (Exception e) {
+            Customer customer = customerMapper.customerToCustomerRequestDto(customerRequestDto);
+            customRepository.save(customer);
+            return customerMapper.customerToCustomerResources(customer);
+        } catch (Exception ignored) {
 
         }
         return null;
@@ -85,7 +82,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    @CacheEvict(value = "customers", key = "#id", allEntries = false)
+    @CacheEvict(value = "customers", key = "#id")
     public void deleteCustomer(Long id) {
         customRepository.findById(id).orElseThrow(() -> new RuntimeException("Customer not found!"));
         customRepository.deleteById(id);

@@ -1,8 +1,8 @@
 package com.seyhavorn.springbootecommerce.authentication.mapper;
 
-import com.seyhavorn.springbootecommerce.authentication.entity.Role;
 import com.seyhavorn.springbootecommerce.authentication.dto.resource.PermissionResource;
 import com.seyhavorn.springbootecommerce.authentication.dto.resource.RoleResource;
+import com.seyhavorn.springbootecommerce.authentication.entity.Role;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +24,6 @@ public class RoleMapper {
                 }).toList();
 
         roleResource.setPermissions(PermissionResources);
-        roleResource.setName(role.getName().toUpperCase());
 
         return roleResource;
     }

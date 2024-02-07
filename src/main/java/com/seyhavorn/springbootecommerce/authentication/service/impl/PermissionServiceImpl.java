@@ -8,6 +8,8 @@ import com.seyhavorn.springbootecommerce.authentication.dto.resource.PermissionR
 import com.seyhavorn.springbootecommerce.authentication.service.PermissionService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +33,7 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     @Override
+    @Cacheable("permissions")
     public List<PermissionResource> findAll() {
         List<Permission> permissions = permissionRepository.findAll(Sort.by(Sort.Direction.ASC, "name"));
         return permissions.stream()
@@ -39,12 +42,14 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     @Override
+    @Cacheable(value = "permissions", key = "#permissionId")
     public PermissionResource getPermissionById(Long permissionId) {
         Permission permission = permissionRepository.findById(permissionId).orElseThrow(() -> new RuntimeException("Permission not found!"));
         return permissionMapper.permissionToPermissionResource(permission);
     }
 
     @Override
+    @CacheEvict(value = "permissions", key = "#permissionId")
     public Boolean delete(Long permissionId) {
         Permission permission = permissionRepository.findById(permissionId).orElseThrow(() -> new RuntimeException("Permission not found!"));
 
