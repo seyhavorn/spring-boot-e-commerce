@@ -1,5 +1,6 @@
 package com.seyhavorn.springbootecommerce.shop.controller;
 
+import com.seyhavorn.springbootecommerce.authentication.dto.FilterRequestDto;
 import com.seyhavorn.springbootecommerce.helper.ApiResponse;
 import com.seyhavorn.springbootecommerce.shop.dto.request.CustomerRequestDto;
 import com.seyhavorn.springbootecommerce.shop.service.CustomerService;
@@ -17,8 +18,11 @@ public class CustomerController {
     private final CustomerService customerService;
 
     @GetMapping
-    public ResponseEntity<?> list(@RequestParam(value = "page", required = false, defaultValue = "0") int page, @RequestParam(value = "size", required = false, defaultValue = "10") int size) {
-        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(true, "Customers list", customerService.findAll(page, size)));
+    public ResponseEntity<?> list(
+            @RequestBody(required = false) FilterRequestDto filterRequestDto,
+            @RequestParam(value = "page", required = false, defaultValue = "0") int page,
+            @RequestParam(value = "size", required = false, defaultValue = "10") int size) {
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(true, "Customers list", customerService.findAll(page, size, filterRequestDto)));
     }
 
     @PostMapping

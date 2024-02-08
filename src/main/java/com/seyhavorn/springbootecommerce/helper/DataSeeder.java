@@ -8,8 +8,10 @@ import com.seyhavorn.springbootecommerce.authentication.service.RoleService;
 import com.seyhavorn.springbootecommerce.authentication.service.UserService;
 import com.seyhavorn.springbootecommerce.shop.dto.request.CategoryRequestDto;
 import com.seyhavorn.springbootecommerce.shop.dto.request.CustomerRequestDto;
+import com.seyhavorn.springbootecommerce.shop.dto.request.ProductRequestDto;
 import com.seyhavorn.springbootecommerce.shop.service.CategoryService;
 import com.seyhavorn.springbootecommerce.shop.service.CustomerService;
+import com.seyhavorn.springbootecommerce.shop.service.ProductService;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -26,6 +28,7 @@ public class DataSeeder implements CommandLineRunner {
     private final UserService userService;
     private final CustomerService customerService;
     private final CategoryService categoryService;
+    private final ProductService productService;
 
     @Override
     public void run(String... args) throws Exception {
@@ -34,6 +37,19 @@ public class DataSeeder implements CommandLineRunner {
 //        createUser();
 //        crateCustomer();
 //        createCategories();
+        createProducts();
+    }
+
+    private void createProducts() {
+        Faker faker = new Faker();
+        for (int i = 0; i < 100; i++) {
+            ProductRequestDto productRequestDto = new ProductRequestDto();
+            productRequestDto.setName(faker.name().title());
+            productRequestDto.setDescription(faker.lorem().sentence());
+            productRequestDto.setPrice((double) faker.number().randomNumber());
+            productRequestDto.setDiscount((double) faker.number().randomDigit());
+            productService.create(productRequestDto);
+        }
     }
 
     private void createPermission() {

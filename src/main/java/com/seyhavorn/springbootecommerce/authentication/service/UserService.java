@@ -2,7 +2,7 @@ package com.seyhavorn.springbootecommerce.authentication.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.seyhavorn.springbootecommerce.authentication.dto.FilterUserDto;
-import com.seyhavorn.springbootecommerce.authentication.dto.UserFilterRequestDto;
+import com.seyhavorn.springbootecommerce.authentication.dto.FilterRequestDto;
 import com.seyhavorn.springbootecommerce.authentication.dto.record.ListUserDto;
 import com.seyhavorn.springbootecommerce.authentication.dto.request.SignupRequestDto;
 import com.seyhavorn.springbootecommerce.authentication.dto.resource.UserResource;
@@ -28,5 +28,5 @@ public interface UserService {
 
     List<ListUserDto> listUsers();
 
-    Page<UserResource> userWithFirstName(int page, int size,UserFilterRequestDto userFilterRequestDto);
+    Page<UserResource> userWithFirstName(int page, int size, FilterRequestDto userFilterRequestDto);
 }

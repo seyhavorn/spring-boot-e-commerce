@@ -1,8 +1,7 @@
 package com.seyhavorn.springbootecommerce.authentication.specifications;
 
 import com.seyhavorn.springbootecommerce.authentication.dto.SearchRequestDto;
-import com.seyhavorn.springbootecommerce.authentication.dto.UserFilterRequestDto;
-import com.seyhavorn.springbootecommerce.authentication.dto.resource.UserResource;
+import com.seyhavorn.springbootecommerce.authentication.dto.FilterRequestDto;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -22,7 +21,7 @@ public class FilterSpecificationService<T> {
         };
     }
 
-    public Specification<T> filterSpecification(List<SearchRequestDto> searchRequestDtoList, UserFilterRequestDto.GlobalOperator globalOperator) {
+    public Specification<T> filterSpecification(List<SearchRequestDto> searchRequestDtoList, FilterRequestDto.GlobalOperator globalOperator) {
         return (root, query, criteriaBuilder) -> {
             if (searchRequestDtoList != null && globalOperator != null) {
 
@@ -83,7 +82,7 @@ public class FilterSpecificationService<T> {
                     }
                 }
 
-                if (globalOperator.equals(UserFilterRequestDto.GlobalOperator.AND)) {
+                if (globalOperator.equals(FilterRequestDto.GlobalOperator.AND)) {
                     return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
                 } else {
                     return criteriaBuilder.or(predicates.toArray(new Predicate[0]));

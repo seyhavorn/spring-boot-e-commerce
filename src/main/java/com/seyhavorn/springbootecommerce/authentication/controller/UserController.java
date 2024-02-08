@@ -1,7 +1,7 @@
 package com.seyhavorn.springbootecommerce.authentication.controller;
 
 import com.seyhavorn.springbootecommerce.authentication.dto.FilterUserDto;
-import com.seyhavorn.springbootecommerce.authentication.dto.UserFilterRequestDto;
+import com.seyhavorn.springbootecommerce.authentication.dto.FilterRequestDto;
 import com.seyhavorn.springbootecommerce.authentication.dto.request.FindUserByUsernameDto;
 import com.seyhavorn.springbootecommerce.authentication.dto.request.SignupRequestDto;
 import com.seyhavorn.springbootecommerce.authentication.service.UserService;
@@ -46,7 +46,7 @@ public class UserController {
 
     @PostMapping("/dynamicParam")
     public ResponseEntity<?> listUserTestRecord(
-            @RequestBody(required = false) UserFilterRequestDto userFilterRequestDto,
+            @RequestBody(required = false) FilterRequestDto userFilterRequestDto,
             @RequestParam(name = "page", defaultValue = "0") int page,
             @RequestParam(name = "size", defaultValue = "10") int size
     ) {

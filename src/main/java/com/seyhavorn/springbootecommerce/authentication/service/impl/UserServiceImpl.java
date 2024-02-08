@@ -3,7 +3,7 @@ package com.seyhavorn.springbootecommerce.authentication.service.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seyhavorn.springbootecommerce.authentication.dto.FilterUserDto;
-import com.seyhavorn.springbootecommerce.authentication.dto.UserFilterRequestDto;
+import com.seyhavorn.springbootecommerce.authentication.dto.FilterRequestDto;
 import com.seyhavorn.springbootecommerce.authentication.dto.record.ListUserDto;
 import com.seyhavorn.springbootecommerce.authentication.dto.request.SignupRequestDto;
 import com.seyhavorn.springbootecommerce.authentication.dto.resource.UserResource;
@@ -123,15 +123,16 @@ public class UserServiceImpl implements UserService {
     //Test User with Query:
     @Override
     @Cacheable("users")
-    public Page<UserResource> userWithFirstName(int page, int size, UserFilterRequestDto userFilterRequestDto) {
+    public Page<UserResource> userWithFirstName(int page, int size, FilterRequestDto filterRequestDto) {
         Page<User> users;
         PageRequest pageRequest = PageRequest.of(page, size);
 
-        if (userFilterRequestDto != null) {
-            Specification<User> spec = filterSpecificationService.filterSpecification(userFilterRequestDto.getSearchRequestDtoList(), userFilterRequestDto.getGlobalOperator());
+        if (filterRequestDto != null) {
+            Specification<User> spec = filterSpecificationService.filterSpecification(filterRequestDto.getSearchRequestDtoList(), filterRequestDto.getGlobalOperator());
             users = userRepository.findAll(spec, pageRequest);
+        } else  {
+            users = userRepository.findAll(pageRequest);
         }
-        users = userRepository.findAll(pageRequest);
 
         return new PageImpl<>(users.getContent().stream().map(userMapper::fromUserToUserResource).toList(), pageRequest, users.getTotalElements());
     }
