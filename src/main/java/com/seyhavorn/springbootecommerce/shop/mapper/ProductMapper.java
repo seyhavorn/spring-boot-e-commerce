@@ -11,6 +11,11 @@ public class ProductMapper {
     public ProductResourceDto productToProductResourceDto(Product product) {
         ProductResourceDto productResourceDto = new ProductResourceDto();
         BeanUtils.copyProperties(product, productResourceDto);
+
+        if (product.getCategory() != null && product.getCategory().getId() != null) {
+            productResourceDto.setCategory_id(product.getCategory().getId());
+        }
+
         return productResourceDto;
     }
 

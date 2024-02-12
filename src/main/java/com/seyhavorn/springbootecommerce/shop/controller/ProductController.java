@@ -45,4 +45,14 @@ public class ProductController {
         productService.deleteProduct(productId);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(true, "success", null));
     }
+
+    @GetMapping("/productsByCategoryId/{id}")
+    public ResponseEntity<?> getProductsByCategoryId(@PathVariable("id") Long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ApiResponse(true, "Product By Category " + id,
+                        productService.getProductsByCategoryId(id))
+        );
+    }
+
+
 }

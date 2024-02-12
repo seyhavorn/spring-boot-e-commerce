@@ -5,8 +5,9 @@ import lombok.Data;
 @Data
 public class ProductRequestDto {
     private String name;
-    private Double price;
+    private Integer price = 0;
     private String imageUrl;
-    private Double discount;
+    private Integer discount = 0;
     private String description;
+    private Long category_id;
 }

@@ -6,6 +6,8 @@ import com.seyhavorn.springbootecommerce.shop.dto.resources.ProductResourceDto;
 import com.seyhavorn.springbootecommerce.shop.entity.Product;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
+
 public interface ProductService {
     ProductResourceDto create(ProductRequestDto productRequestDto);
 
@@ -16,4 +18,6 @@ public interface ProductService {
     ProductResourceDto findById(Long id);
 
     void deleteProduct(Long id);
+
+    List<ProductResourceDto> getProductsByCategoryId(Long categoryId);
 }

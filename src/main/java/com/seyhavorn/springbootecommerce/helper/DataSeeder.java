@@ -37,17 +37,18 @@ public class DataSeeder implements CommandLineRunner {
 //        createUser();
 //        crateCustomer();
 //        createCategories();
-        createProducts();
+//        createProducts();
     }
 
     private void createProducts() {
         Faker faker = new Faker();
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 10; i++) {
             ProductRequestDto productRequestDto = new ProductRequestDto();
             productRequestDto.setName(faker.name().title());
+            productRequestDto.setCategory_id((long) faker.number().numberBetween(1, 10));
             productRequestDto.setDescription(faker.lorem().sentence());
-            productRequestDto.setPrice((double) faker.number().randomNumber());
-            productRequestDto.setDiscount((double) faker.number().randomDigit());
+            productRequestDto.setPrice(faker.number().randomDigit());
+            productRequestDto.setDiscount(faker.number().randomDigit());
             productService.create(productRequestDto);
         }
     }
@@ -79,7 +80,7 @@ public class DataSeeder implements CommandLineRunner {
         }
     }
 
-    private void crateCustomer() throws JsonProcessingException {
+    private void crateCustomer() {
         Faker faker = new Faker();
         for (int i = 0; i < 1000; i++) {
             CustomerRequestDto customerRequestDto = new CustomerRequestDto();
@@ -92,7 +93,7 @@ public class DataSeeder implements CommandLineRunner {
 
     private void createCategories() {
         Faker faker = new Faker();
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 5; i++) {
             CategoryRequestDto categoryRequestDto = new CategoryRequestDto();
             categoryRequestDto.setName(faker.name().fullName());
             categoryRequestDto.setDescription(faker.name().title());

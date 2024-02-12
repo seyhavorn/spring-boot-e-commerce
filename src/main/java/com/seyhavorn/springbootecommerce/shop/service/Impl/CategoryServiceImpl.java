@@ -8,6 +8,7 @@ import com.seyhavorn.springbootecommerce.shop.entity.Category;
 import com.seyhavorn.springbootecommerce.shop.mapper.CategoryMapper;
 import com.seyhavorn.springbootecommerce.shop.repository.CategoryRepository;
 import com.seyhavorn.springbootecommerce.shop.service.CategoryService;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.cache.annotation.CacheEvict;
@@ -18,9 +19,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.util.stream.Collectors;
-
 @Service
+@Transactional
 @AllArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
@@ -52,13 +52,13 @@ public class CategoryServiceImpl implements CategoryService {
                     filterRequestDto.getGlobalOperator()
             );
             categories = categoryRepository.findAll(specification, pageRequest);
-        } else  {
+        } else {
             categories = categoryRepository.findAll(pageRequest);
         }
 
         return new PageImpl<>(categories.getContent().stream()
                 .map(categoryMapper::categoryToCategoryResourceDto)
-                .collect(Collectors.toList()), pageRequest, categories.getTotalElements());
+                .toList(), pageRequest, categories.getTotalElements());
     }
 
     @Override
@@ -80,7 +80,8 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @CacheEvict(value = "categories", key = "#id")
     public void deleteCategory(Long id) {
-        categoryRepository.findById(id).orElseThrow(() -> new RuntimeException("Category not found!"));
+        Category category = categoryRepository.findById(id).orElseThrow(() -> new RuntimeException("Category not found!"));
+        category.getProducts().forEach(product -> product.setCategory(null));
         categoryRepository.deleteById(id);
     }
 }
