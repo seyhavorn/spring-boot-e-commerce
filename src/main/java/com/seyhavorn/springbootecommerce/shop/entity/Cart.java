@@ -7,18 +7,19 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Table(name = "cart")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "customers")
-public class Customer extends AuditableEntity {
+public class Cart extends AuditableEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
-    private String username;
-    private String email;
-    private String address;
-    private String phone_number;
+    private Integer quantity;
+
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
 }

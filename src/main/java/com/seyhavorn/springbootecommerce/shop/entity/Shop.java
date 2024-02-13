@@ -32,7 +32,7 @@ public class Shop extends AuditableEntity {
     @Column(columnDefinition = "jsonb")
     private String shop_object;
 
-    @OneToMany(mappedBy = "shop", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "shop", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
     @ToString.Exclude
-    private Set<Branch> branchs = new HashSet<>();
+    private Set<Branch> branches = new HashSet<>();
 }

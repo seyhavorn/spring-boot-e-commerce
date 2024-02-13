@@ -6,19 +6,26 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 @Entity
+@Table(name = "order")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "customers")
-public class Customer extends AuditableEntity {
+public class Order extends AuditableEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
-    private String username;
-    private String email;
-    private String address;
-    private String phone_number;
+    @Column(name = "order_date")
+    private Date orderDate;
+
+    @Column(name = "total_price")
+    private Integer totalPrice;
+
+    @ManyToOne()
+    @JoinColumn(name = "customer_id", referencedColumnName = "id")
+    private Customer customer;
 }

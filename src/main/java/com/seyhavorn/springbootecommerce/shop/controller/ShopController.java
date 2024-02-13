@@ -20,17 +20,17 @@ public class ShopController {
     @PostMapping
     public ResponseEntity<?> create(@RequestBody ShopRequestDto shopRequestDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(
-                new ApiResponse(true, "Customer created", shopService.create(shopRequestDto)));
+                new ApiResponse(true, "Shop created", shopService.create(shopRequestDto)));
     }
 
-    @GetMapping
+    @PostMapping("/list")
     public ResponseEntity<?> getAll(
             @RequestParam(value = "page", required = false, defaultValue = "0") int page,
             @RequestParam(value = "size", required = false, defaultValue = "10") int size,
             @RequestBody(required = false) FilterRequestDto filterRequestDto
     ) {
         return ResponseEntity.status(HttpStatus.OK).body(
-                new ApiResponse(true, "Categories list", shopService.findAll(page, size, filterRequestDto))
+                new ApiResponse(true, "shop list", shopService.findAll(page, size, filterRequestDto))
         );
     }
 
@@ -42,9 +42,9 @@ public class ShopController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable("id") Long shopId, @RequestBody() ShopRequestDto shopRequestDto) {
+    public ResponseEntity<?> update(@PathVariable("id") Long shopId, @RequestBody ShopRequestDto shopRequestDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(
-                new ApiResponse(true, "Category has updated", shopService.update(shopRequestDto, shopId))
+                new ApiResponse(true, "shop has updated", shopService.update(shopRequestDto, shopId))
         );
     }
 

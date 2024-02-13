@@ -26,7 +26,7 @@ public class Category extends AuditableEntity {
     private String description;
     private String imageUrl;
 
-    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
     @ToString.Exclude
     private List<Product> products;
 }

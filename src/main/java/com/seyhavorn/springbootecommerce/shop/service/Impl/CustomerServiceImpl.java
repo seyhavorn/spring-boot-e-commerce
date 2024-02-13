@@ -70,7 +70,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     @CacheEvict(value = "customers", allEntries = true)
     public Customer update(CustomerRequestDto customerRequestDto, Long id) {
-        Customer customer = customRepository.findById(id).orElseThrow(() -> new RuntimeException("Customer not found!"));
+        Customer customer = checkCustomerExists(id);
         BeanUtils.copyProperties(customerRequestDto, customer);
 
         if (customerRequestDto.getName() != null) {
@@ -92,14 +92,18 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     @Cacheable(value = "customers", key = "#id")
     public CustomerResourceDto findById(Long id) {
-        Customer customer = customRepository.findById(id).orElseThrow(() -> new RuntimeException("Customer not found!"));
+        Customer customer = checkCustomerExists(id);
         return customerMapper.customerToCustomerResources(customer);
     }
 
     @Override
     @CacheEvict(value = "customers", key = "#id")
     public void deleteCustomer(Long id) {
-        customRepository.findById(id).orElseThrow(() -> new RuntimeException("Customer not found!"));
+        checkCustomerExists(id);
         customRepository.deleteById(id);
+    }
+
+    private Customer checkCustomerExists(Long customerId) {
+        return customRepository.findById(customerId).orElseThrow(() -> new RuntimeException("Customer not found!"));
     }
 }

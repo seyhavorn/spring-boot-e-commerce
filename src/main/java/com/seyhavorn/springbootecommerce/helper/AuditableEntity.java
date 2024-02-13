@@ -23,10 +23,13 @@ public class AuditableEntity implements Serializable {
     @CreatedBy
     @Column(updatable = false)
     protected String createdBy;
+
     @LastModifiedBy
     protected String updatedBy;
+
     @CreationTimestamp
     private Date createdAt;
+
     @UpdateTimestamp
     private Date updatedAt;
 

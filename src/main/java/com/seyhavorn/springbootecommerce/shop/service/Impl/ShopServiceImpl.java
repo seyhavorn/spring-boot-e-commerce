@@ -10,6 +10,9 @@ import com.seyhavorn.springbootecommerce.shop.repository.ShopRepository;
 import com.seyhavorn.springbootecommerce.shop.service.ShopService;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.BeanUtils;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -25,13 +28,20 @@ public class ShopServiceImpl implements ShopService {
     private final FilterSpecificationService<Shop> filterSpecificationService;
     private final ShopMapper shopMapper;
 
-
     @Override
+    @CacheEvict(value = "shop", allEntries = true)
     public ShopResourceDto create(ShopRequestDto shopRequestDto) {
-        return null;
+        if (shopRepository.existsByName(shopRequestDto.getName())) {
+            throw new RuntimeException("shop already exists");
+        }
+
+        Shop shop = shopMapper.shopRequestDtoToShop(shopRequestDto);
+        shopRepository.save(shop);
+        return shopMapper.shopToShopResourceDto(shop);
     }
 
     @Override
+    @Cacheable(value = "shop")
     public Page<ShopResourceDto> findAll(int page, int size, FilterRequestDto filterRequestDto) {
         Page<Shop> shops;
         PageRequest pageRequest = PageRequest.of(page, size);
@@ -53,17 +63,30 @@ public class ShopServiceImpl implements ShopService {
     }
 
     @Override
-    public Shop update(ShopRequestDto shopRequestDto, Long id) {
-        return null;
+    @Cacheable(value = "shop", key = "#id")
+    public ShopResourceDto update(ShopRequestDto shopRequestDto, Long id) {
+        Shop shop = checkShop(id);
+        BeanUtils.copyProperties(shopRequestDto, shop);
+        shopRepository.save(shop);
+        return shopMapper.shopToShopResourceDto(shop);
     }
 
     @Override
+    @Cacheable(value = "shop", key = "#id")
     public ShopResourceDto findById(Long id) {
-        return null;
+        Shop shop = checkShop(id);
+        return shopMapper.shopToShopResourceDto(shop);
     }
 
     @Override
+    @CacheEvict(value = "shop", key = "#id")
     public void deleteShop(Long id) {
+        Shop shop = checkShop(id);
+        shop.getBranches().forEach(branch -> branch.setShop(null));
+        shopRepository.deleteById(id);
+    }
 
+    private Shop checkShop(Long id) {
+        return shopRepository.findById(id).orElseThrow(() -> new RuntimeException("Shop not found!"));
     }
 }

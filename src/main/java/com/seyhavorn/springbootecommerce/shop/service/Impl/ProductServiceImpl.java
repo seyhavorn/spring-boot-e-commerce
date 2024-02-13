@@ -36,13 +36,10 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @CacheEvict(value = "products", allEntries = true)
     public ProductResourceDto create(ProductRequestDto productRequestDto) {
-        Category category = categoryRepository.findById(
-                productRequestDto.getCategory_id()).orElseThrow(() -> new RuntimeException("Category not found!"));
-
+        Category category = checkCategoryExists(productRequestDto.getCategory_id());
         Product product = productMapper.productRequestDtoToProduct(productRequestDto);
         product.setCategory(category);
         Product product1 = productRepository.save(product);
-        System.out.println("product 1" + product1);
         return productMapper.productToProductResourceDto(product1);
     }
 
@@ -68,32 +65,43 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    @CacheEvict(value = "products", key = "#id")
-    public Product update(ProductRequestDto productRequestDto, Long id) {
-        Product product = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found!"));
-        BeanUtils.copyProperties(product, productRequestDto);
-        return productRepository.save(product);
+    @CacheEvict(value = "products", key = "#id", allEntries = true)
+    public ProductResourceDto update(ProductRequestDto productRequestDto, Long id) {
+        Product product = checkProductExists(id);
+        Category category = checkCategoryExists(productRequestDto.getCategory_id());
+        BeanUtils.copyProperties(productRequestDto, product);
+        product.setCategory(category);
+        productRepository.save(product);
+        return productMapper.productToProductResourceDto(product);
     }
 
     @Override
     @Cacheable(value = "products", key = "#id")
     public ProductResourceDto findById(Long id) {
-        Product product = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found!"));
+        Product product = checkProductExists(id);
         return productMapper.productToProductResourceDto(product);
     }
 
     @Override
     @CacheEvict(value = "products", key = "#id")
     public void deleteProduct(Long id) {
-        productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found!"));
-        productRepository.deleteById(id);
+        Product product = checkProductExists(id);
+        productRepository.deleteById(product.getId());
     }
 
     @Override
     @Cacheable(value = "products")
     public List<ProductResourceDto> getProductsByCategoryId(Long categoryId) {
-        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new RuntimeException("Category not found!"));
+        Category category = checkCategoryExists(categoryId);
         List<Product> products = productRepository.getProductByCategoryId(category.getId());
         return products.stream().map(productMapper::productToProductResourceDto).toList();
+    }
+
+    private Product checkProductExists(Long productId) {
+        return productRepository.findById(productId).orElseThrow(() -> new RuntimeException("Product not found!"));
+    }
+
+    private Category checkCategoryExists(Long categoryId) {
+        return categoryRepository.findById(categoryId).orElseThrow(() -> new RuntimeException("Category not found!"));
     }
 }

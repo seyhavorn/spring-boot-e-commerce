@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/branch")
+@RequestMapping("/api/branches")
 @AllArgsConstructor
 @EnableCaching
 public class BranchController {
@@ -20,17 +20,17 @@ public class BranchController {
     @PostMapping
     public ResponseEntity<?> create(@RequestBody BranchRequestDto branchRequestDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(
-                new ApiResponse(true, "Customer created", branchService.create(branchRequestDto)));
+                new ApiResponse(true, "Branch created", branchService.create(branchRequestDto)));
     }
 
-    @GetMapping
+    @PostMapping("/list")
     public ResponseEntity<?> getAll(
             @RequestParam(value = "page", required = false, defaultValue = "0") int page,
             @RequestParam(value = "size", required = false, defaultValue = "10") int size,
             @RequestBody(required = false) FilterRequestDto filterRequestDto
     ) {
         return ResponseEntity.status(HttpStatus.OK).body(
-                new ApiResponse(true, "Categories list", branchService.findAll(page, size, filterRequestDto))
+                new ApiResponse(true, "Branches list", branchService.findAll(page, size, filterRequestDto))
         );
     }
 
@@ -44,7 +44,7 @@ public class BranchController {
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable("id") Long branchId, @RequestBody() BranchRequestDto branchRequestDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(
-                new ApiResponse(true, "Category has updated", branchService.update(branchRequestDto, branchId))
+                new ApiResponse(true, "Branch has updated", branchService.update(branchRequestDto, branchId))
         );
     }
 
@@ -53,6 +53,13 @@ public class BranchController {
         branchService.deleteBranch(branchId);
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ApiResponse(true, "success", null)
+        );
+    }
+
+    @GetMapping("/branchesByShopId/{shopId}")
+    public ResponseEntity<?> getBranchesByShopId(@PathVariable("shopId") Long shopId) {
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ApiResponse(true, "Branches by Shop Id: " + shopId, branchService.branchByShopId(shopId))
         );
     }
 

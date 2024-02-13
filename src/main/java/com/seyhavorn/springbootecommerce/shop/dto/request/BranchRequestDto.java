@@ -13,4 +13,5 @@ public class BranchRequestDto {
     private String logo;
     private String description;
     private Map<String, Object> branch_object;
+    private Long shop_id;
 }

@@ -63,25 +63,34 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @CacheEvict(value = "categories", allEntries = true)
-    public Category update(CategoryRequestDto categoryRequestDto, Long id) {
-        Category category = categoryRepository.findById(id).orElseThrow(() -> new RuntimeException("Category not found!"));
+    public CategoryResourceDto update(CategoryRequestDto categoryRequestDto, Long id) {
+        Category category = checkCategoryExists(id);
+
+        if (categoryRepository.existsByName(categoryRequestDto.getName())) {
+            throw new RuntimeException("Category already exists");
+        }
+
         BeanUtils.copyProperties(categoryRequestDto, category);
-        category = categoryRepository.save(category);
-        return category;
+        categoryRepository.save(category);
+        return categoryMapper.categoryToCategoryResourceDto(category);
     }
 
     @Override
     @Cacheable(value = "categories", key = "#id")
     public CategoryResourceDto findById(Long id) {
-        Category category = categoryRepository.findById(id).orElseThrow(() -> new RuntimeException("Category not found!"));
+        Category category = checkCategoryExists(id);
         return categoryMapper.categoryToCategoryResourceDto(category);
     }
 
     @Override
     @CacheEvict(value = "categories", key = "#id")
     public void deleteCategory(Long id) {
-        Category category = categoryRepository.findById(id).orElseThrow(() -> new RuntimeException("Category not found!"));
+        Category category = checkCategoryExists(id);
         category.getProducts().forEach(product -> product.setCategory(null));
         categoryRepository.deleteById(id);
+    }
+
+    private Category checkCategoryExists(Long id) {
+        return categoryRepository.findById(id).orElseThrow(() -> new RuntimeException("Category not found"));
     }
 }
