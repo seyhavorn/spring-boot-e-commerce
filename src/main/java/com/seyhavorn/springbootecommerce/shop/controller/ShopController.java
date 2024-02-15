@@ -2,6 +2,8 @@ package com.seyhavorn.springbootecommerce.shop.controller;
 
 import com.seyhavorn.springbootecommerce.authentication.dto.FilterRequestDto;
 import com.seyhavorn.springbootecommerce.helper.ApiResponse;
+import com.seyhavorn.springbootecommerce.shop.dto.request.AssignShopToUserReqDTO;
+import com.seyhavorn.springbootecommerce.shop.dto.request.FetchUsersByShopId;
 import com.seyhavorn.springbootecommerce.shop.dto.request.ShopRequestDto;
 import com.seyhavorn.springbootecommerce.shop.service.ShopService;
 import lombok.AllArgsConstructor;
@@ -42,9 +44,10 @@ public class ShopController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable("id") Long shopId, @RequestBody ShopRequestDto shopRequestDto) {
+    public ResponseEntity<?> update(@PathVariable("id") Long id, @RequestBody ShopRequestDto shopRequestDto) {
+        shopRequestDto.setId(id);
         return ResponseEntity.status(HttpStatus.CREATED).body(
-                new ApiResponse(true, "shop has updated", shopService.update(shopRequestDto, shopId))
+                new ApiResponse(true, "shop has updated", shopService.update(shopRequestDto))
         );
     }
 
@@ -53,6 +56,22 @@ public class ShopController {
         shopService.deleteShop(shopId);
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ApiResponse(true, "success", null)
+        );
+    }
+
+    @PostMapping("/assignShopToUser")
+    public ResponseEntity<?> assignShopToUser(@RequestBody AssignShopToUserReqDTO assignShopToUserReqDTO) {
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ApiResponse(true, "Shop assigned successfully",
+                        shopService.assignShopToUser(assignShopToUserReqDTO.getUserId(), assignShopToUserReqDTO.getShopId()))
+        );
+    }
+
+    @PostMapping("/usersByShopId")
+    public ResponseEntity<?> fetchUsersByShopId(@RequestBody FetchUsersByShopId fetchUsersByShopId) {
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ApiResponse(true, "Users By Shop ID: " + fetchUsersByShopId.getShopId(),
+                        shopService.fetchUsersByShopId(fetchUsersByShopId))
         );
     }
 

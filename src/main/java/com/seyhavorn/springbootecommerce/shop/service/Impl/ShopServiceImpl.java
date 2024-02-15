@@ -1,7 +1,13 @@
 package com.seyhavorn.springbootecommerce.shop.service.Impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seyhavorn.springbootecommerce.authentication.dto.FilterRequestDto;
+import com.seyhavorn.springbootecommerce.authentication.dto.resource.UserResource;
+import com.seyhavorn.springbootecommerce.authentication.entity.User;
+import com.seyhavorn.springbootecommerce.authentication.mapper.UserMapper;
+import com.seyhavorn.springbootecommerce.authentication.repository.UserRepository;
 import com.seyhavorn.springbootecommerce.authentication.specifications.FilterSpecificationService;
+import com.seyhavorn.springbootecommerce.shop.dto.request.FetchUsersByShopId;
 import com.seyhavorn.springbootecommerce.shop.dto.request.ShopRequestDto;
 import com.seyhavorn.springbootecommerce.shop.dto.resources.ShopResourceDto;
 import com.seyhavorn.springbootecommerce.shop.entity.Shop;
@@ -19,6 +25,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @Transactional
 @AllArgsConstructor
@@ -27,6 +35,9 @@ public class ShopServiceImpl implements ShopService {
     private final ShopRepository shopRepository;
     private final FilterSpecificationService<Shop> filterSpecificationService;
     private final ShopMapper shopMapper;
+    private final ObjectMapper objectMapper;
+    private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
     @Override
     @CacheEvict(value = "shop", allEntries = true)
@@ -63,9 +74,9 @@ public class ShopServiceImpl implements ShopService {
     }
 
     @Override
-    @Cacheable(value = "shop", key = "#id")
-    public ShopResourceDto update(ShopRequestDto shopRequestDto, Long id) {
-        Shop shop = checkShop(id);
+    @Cacheable(value = "shop")
+    public ShopResourceDto update(ShopRequestDto shopRequestDto) {
+        Shop shop = checkShop(shopRequestDto.getId());
         BeanUtils.copyProperties(shopRequestDto, shop);
         shopRepository.save(shop);
         return shopMapper.shopToShopResourceDto(shop);
@@ -84,6 +95,37 @@ public class ShopServiceImpl implements ShopService {
         Shop shop = checkShop(id);
         shop.getBranches().forEach(branch -> branch.setShop(null));
         shopRepository.deleteById(id);
+    }
+
+    @Override
+    public Boolean assignShopToUser(Long userId, Long shopId) {
+        Shop shop = checkShop(shopId);
+        User user = checkUser(userId);
+        try {
+            shop.assignUserToShop(user);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    @Override
+    public Page<UserResource> fetchUsersByShopId(FetchUsersByShopId fetchUsersByShopId) {
+        Shop shop = checkShop(fetchUsersByShopId.getShopId());
+        PageRequest pageRequest = PageRequest.of(fetchUsersByShopId.getPage(), fetchUsersByShopId.getSize());
+
+        Page<User> users = userRepository.findUserByShopId(shop.getId(), pageRequest);
+
+        List<UserResource> userResources = users.getContent().stream()
+                .map(userMapper::fromUserToUserResource)
+                .toList();
+
+        return new PageImpl<>(userResources, pageRequest, users.getTotalElements());
+    }
+
+
+    private User checkUser(Long userId) {
+        return userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found!"));
     }
 
     private Shop checkShop(Long id) {

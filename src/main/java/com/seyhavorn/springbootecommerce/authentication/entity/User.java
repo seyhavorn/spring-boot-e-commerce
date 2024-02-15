@@ -2,11 +2,13 @@ package com.seyhavorn.springbootecommerce.authentication.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.seyhavorn.springbootecommerce.helper.AuditableEntity;
+import com.seyhavorn.springbootecommerce.shop.entity.Shop;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -42,6 +44,10 @@ public class User extends AuditableEntity {
             inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")}
     )
     private Set<Role> roles = new HashSet<>();
+
+    @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER)
+    @ToString.Exclude
+    private Set<Shop> shops = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {

@@ -1,5 +1,6 @@
 package com.seyhavorn.springbootecommerce.shop.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.seyhavorn.springbootecommerce.helper.AuditableEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -29,6 +30,7 @@ public class Branch extends AuditableEntity {
     @Column(columnDefinition = "jsonb")
     private String branch_object;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "shop_id",referencedColumnName = "id")
     @ToString.Exclude
