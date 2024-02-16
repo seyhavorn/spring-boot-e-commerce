@@ -32,10 +32,10 @@ public class DataSeeder implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-//        createPermission();
-//        createRole();
-//        createUser();
-//        crateCustomer();
+        createPermission();
+        createRole();
+        createUser();
+        crateCustomer();
 //        createCategories();
 //        createProducts();
     }

@@ -3,11 +3,17 @@ package com.seyhavorn.springbootecommerce.shop.entity;
 
 import com.seyhavorn.springbootecommerce.helper.AuditableEntity;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
 @Entity
 @Table(name = "payment")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Payment extends AuditableEntity {
 
     @Id

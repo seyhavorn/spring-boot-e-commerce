@@ -1,6 +1,5 @@
 package com.seyhavorn.springbootecommerce.shop.service.Impl;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seyhavorn.springbootecommerce.authentication.dto.FilterRequestDto;
 import com.seyhavorn.springbootecommerce.authentication.dto.resource.UserResource;
 import com.seyhavorn.springbootecommerce.authentication.entity.User;
@@ -35,7 +34,6 @@ public class ShopServiceImpl implements ShopService {
     private final ShopRepository shopRepository;
     private final FilterSpecificationService<Shop> filterSpecificationService;
     private final ShopMapper shopMapper;
-    private final ObjectMapper objectMapper;
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
@@ -122,7 +120,6 @@ public class ShopServiceImpl implements ShopService {
 
         return new PageImpl<>(userResources, pageRequest, users.getTotalElements());
     }
-
 
     private User checkUser(Long userId) {
         return userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found!"));

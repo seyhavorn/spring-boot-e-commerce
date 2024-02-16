@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.util.Date;
 
@@ -19,6 +20,7 @@ public class Shipment extends AuditableEntity {
     private Long id;
 
     @Column(name = "shipment_date")
+    @CreationTimestamp
     private Date shipmentDate;
 
     private String address;
@@ -35,6 +37,5 @@ public class Shipment extends AuditableEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     private Order order;
-
 
 }
