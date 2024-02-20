@@ -9,6 +9,7 @@ import com.seyhavorn.springbootecommerce.authentication.service.UserService;
 import com.seyhavorn.springbootecommerce.shop.dto.request.CategoryRequestDto;
 import com.seyhavorn.springbootecommerce.shop.dto.request.CustomerRequestDto;
 import com.seyhavorn.springbootecommerce.shop.dto.request.ProductRequestDto;
+import com.seyhavorn.springbootecommerce.shop.dto.resources.CategoryResourceDto;
 import com.seyhavorn.springbootecommerce.shop.service.CategoryService;
 import com.seyhavorn.springbootecommerce.shop.service.CustomerService;
 import com.seyhavorn.springbootecommerce.shop.service.ProductService;
@@ -32,24 +33,45 @@ public class DataSeeder implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        createPermission();
-        createRole();
-        createUser();
-        crateCustomer();
+//        createPermission();
+//        createRole();
+//        createUser();
+//        crateCustomer();
 //        createCategories();
-//        createProducts();
     }
 
-    private void createProducts() {
+//    private void createProducts() {
+//        Faker faker = new Faker();
+//        for (int i = 0; i < 10; i++) {
+//            ProductRequestDto productRequestDto = new ProductRequestDto();
+//            productRequestDto.setName(faker.name().title());
+//            productRequestDto.setCategory_id((long) faker.number().numberBetween(1, 10));
+//            productRequestDto.setDescription(faker.lorem().sentence());
+//            productRequestDto.setPrice(faker.number().randomDigit());
+//            productRequestDto.setDiscount(faker.number().randomDigit());
+//            productService.create(productRequestDto);
+//        }
+//    }
+
+    private void createCategories() {
         Faker faker = new Faker();
-        for (int i = 0; i < 10; i++) {
-            ProductRequestDto productRequestDto = new ProductRequestDto();
-            productRequestDto.setName(faker.name().title());
-            productRequestDto.setCategory_id((long) faker.number().numberBetween(1, 10));
-            productRequestDto.setDescription(faker.lorem().sentence());
-            productRequestDto.setPrice(faker.number().randomDigit());
-            productRequestDto.setDiscount(faker.number().randomDigit());
-            productService.create(productRequestDto);
+        for (int i = 0; i < 5; i++) {
+            CategoryRequestDto categoryRequestDto = new CategoryRequestDto();
+            categoryRequestDto.setName(faker.name().fullName());
+            categoryRequestDto.setDescription(faker.name().title());
+            categoryRequestDto.setImageUrl(faker.internet().image());
+            CategoryResourceDto categoryResourceDto = categoryService.create(categoryRequestDto);
+
+            for (int j = 0; j < 2; j++) {
+                ProductRequestDto productRequestDto = new ProductRequestDto();
+                productRequestDto.setName(faker.name().title());
+                productRequestDto.setCategory_id(categoryResourceDto.getId());
+                productRequestDto.setDescription(faker.lorem().sentence());
+                productRequestDto.setPrice(faker.number().randomDigit());
+                productRequestDto.setDiscount(faker.number().randomDigit());
+                productService.create(productRequestDto);
+            }
+
         }
     }
 
@@ -88,17 +110,6 @@ public class DataSeeder implements CommandLineRunner {
             customerRequestDto.setUsername(faker.name().username());
             customerRequestDto.setEmail(faker.internet().emailAddress());
             customerService.create(customerRequestDto);
-        }
-    }
-
-    private void createCategories() {
-        Faker faker = new Faker();
-        for (int i = 0; i < 5; i++) {
-            CategoryRequestDto categoryRequestDto = new CategoryRequestDto();
-            categoryRequestDto.setName(faker.name().fullName());
-            categoryRequestDto.setDescription(faker.name().title());
-            categoryRequestDto.setImageUrl(faker.internet().image());
-            categoryService.create(categoryRequestDto);
         }
     }
 }

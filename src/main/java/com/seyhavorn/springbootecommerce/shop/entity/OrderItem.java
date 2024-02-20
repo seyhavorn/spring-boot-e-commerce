@@ -3,10 +3,12 @@ package com.seyhavorn.springbootecommerce.shop.entity;
 import com.seyhavorn.springbootecommerce.helper.AuditableEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "order_item")
+@Data
+@Table(name = "order_items")
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderItem extends AuditableEntity {

@@ -31,13 +31,18 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @CacheEvict(value = "categories", allEntries = true)
     public CategoryResourceDto create(CategoryRequestDto categoryRequestDto) {
-        if (categoryRepository.existsByName(categoryRequestDto.getName())) {
-            throw new RuntimeException("Category already exists");
-        }
+        try {
+            if (categoryRepository.existsByName(categoryRequestDto.getName())) {
+                throw new RuntimeException("Category already exists");
+            }
 
-        Category category = categoryMapper.categoryRequestDtoTocategory(categoryRequestDto);
-        categoryRepository.save(category);
-        return categoryMapper.categoryToCategoryResourceDto(category);
+            Category category = categoryMapper.categoryRequestDtoTocategory(categoryRequestDto);
+            categoryRepository.save(category);
+            return categoryMapper.categoryToCategoryResourceDto(category);
+        } catch (Exception e) {
+
+        }
+        return null;
     }
 
     @Override
