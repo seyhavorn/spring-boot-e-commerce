@@ -9,9 +9,9 @@ import org.springframework.data.domain.Page;
 public interface OrderItemsService {
     OrderItemsResourceDto create(OrderItemsRequestDto orderItemsRequestDto);
 
-    Page<OrderResourceDto> findAll(int page, int size, FilterRequestDto filterRequestDto);
+    Page<OrderItemsResourceDto> findAll(int page, int size, FilterRequestDto filterRequestDto);
 
     OrderItemsResourceDto update(OrderResourceDto orderResourceDto);
 
-    OrderResourceDto findById(Long id);
+    OrderItemsResourceDto findById(Long id);
 }
