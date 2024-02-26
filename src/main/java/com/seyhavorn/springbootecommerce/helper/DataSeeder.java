@@ -6,13 +6,13 @@ import com.seyhavorn.springbootecommerce.authentication.dto.request.SignupReques
 import com.seyhavorn.springbootecommerce.authentication.service.PermissionService;
 import com.seyhavorn.springbootecommerce.authentication.service.RoleService;
 import com.seyhavorn.springbootecommerce.authentication.service.UserService;
-import com.seyhavorn.springbootecommerce.shop.dto.request.CategoryRequestDto;
+import com.seyhavorn.springbootecommerce.product.dto.request.CategoryRequestDto;
 import com.seyhavorn.springbootecommerce.shop.dto.request.CustomerRequestDto;
-import com.seyhavorn.springbootecommerce.shop.dto.request.ProductRequestDto;
-import com.seyhavorn.springbootecommerce.shop.dto.resources.CategoryResourceDto;
-import com.seyhavorn.springbootecommerce.shop.service.CategoryService;
+import com.seyhavorn.springbootecommerce.product.dto.request.ProductRequestDto;
+import com.seyhavorn.springbootecommerce.product.dto.resource.CategoryResourceDto;
+import com.seyhavorn.springbootecommerce.product.service.CategoryService;
 import com.seyhavorn.springbootecommerce.shop.service.CustomerService;
-import com.seyhavorn.springbootecommerce.shop.service.ProductService;
+import com.seyhavorn.springbootecommerce.product.service.ProductService;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -40,18 +40,18 @@ public class DataSeeder implements CommandLineRunner {
 //        createCategories();
     }
 
-//    private void createProducts() {
-//        Faker faker = new Faker();
-//        for (int i = 0; i < 10; i++) {
-//            ProductRequestDto productRequestDto = new ProductRequestDto();
-//            productRequestDto.setName(faker.name().title());
-//            productRequestDto.setCategory_id((long) faker.number().numberBetween(1, 10));
-//            productRequestDto.setDescription(faker.lorem().sentence());
-//            productRequestDto.setPrice(faker.number().randomDigit());
-//            productRequestDto.setDiscount(faker.number().randomDigit());
-//            productService.create(productRequestDto);
-//        }
-//    }
+    private void createProducts() {
+        Faker faker = new Faker();
+        for (int i = 0; i < 10; i++) {
+            ProductRequestDto productRequestDto = new ProductRequestDto();
+            productRequestDto.setName(faker.name().title());
+            productRequestDto.setCategory_id((long) faker.number().numberBetween(1, 10));
+            productRequestDto.setDescription(faker.lorem().sentence());
+            productRequestDto.setPrice(faker.number().randomDigit());
+            productRequestDto.setDiscount(faker.number().randomDigit());
+            productService.create(productRequestDto);
+        }
+    }
 
     private void createCategories() {
         Faker faker = new Faker();

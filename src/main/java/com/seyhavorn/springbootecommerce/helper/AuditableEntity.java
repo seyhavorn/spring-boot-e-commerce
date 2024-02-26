@@ -33,4 +33,7 @@ public class AuditableEntity implements Serializable {
     @UpdateTimestamp
     private Date updatedAt;
 
+    @Column(name = "is_deleted", columnDefinition = "boolean default false", nullable = false)
+    private Boolean isDeleted = false;
+
 }

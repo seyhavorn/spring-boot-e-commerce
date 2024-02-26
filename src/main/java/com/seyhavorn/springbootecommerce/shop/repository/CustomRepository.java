@@ -6,4 +6,5 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 public interface CustomRepository extends JpaRepository<Customer, Long>, JpaSpecificationExecutor<Customer> {
     Boolean existsByUsername(String username);
+
 }

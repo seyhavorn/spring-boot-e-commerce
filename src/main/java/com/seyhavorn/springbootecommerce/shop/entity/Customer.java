@@ -2,12 +2,12 @@ package com.seyhavorn.springbootecommerce.shop.entity;
 
 import com.seyhavorn.springbootecommerce.helper.AuditableEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
-@Data
+@Getter
+@Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "customers")

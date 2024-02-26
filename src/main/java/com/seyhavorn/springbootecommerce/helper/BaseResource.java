@@ -10,4 +10,5 @@ public class BaseResource implements Serializable {
     private Long id;
     private Date createdAt;
     private Date updatedAt;
+    private Boolean isDeleted;
 }

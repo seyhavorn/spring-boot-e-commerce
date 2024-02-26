@@ -14,6 +14,7 @@ import java.util.Objects;
 @Entity
 @Getter
 @Setter
+@ToString
 @RequiredArgsConstructor
 @Table(name = "branch")
 public class Branch extends AuditableEntity {
@@ -32,7 +33,7 @@ public class Branch extends AuditableEntity {
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "shop_id",referencedColumnName = "id")
+    @JoinColumn(name = "shop_id", referencedColumnName = "id")
     @ToString.Exclude
     private Shop shop;
 
