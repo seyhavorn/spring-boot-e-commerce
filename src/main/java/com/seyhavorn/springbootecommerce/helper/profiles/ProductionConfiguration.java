@@ -1,4 +1,4 @@
-package com.seyhavorn.springbootecommerce.profiles;
+package com.seyhavorn.springbootecommerce.helper.profiles;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
